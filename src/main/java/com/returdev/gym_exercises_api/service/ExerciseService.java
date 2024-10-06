@@ -18,8 +18,6 @@ public interface ExerciseService {
 
     ExerciseEntity partialUpdateExercise(ExerciseEntity patchExercise);
 
-    ExerciseEntity saveOrUpdateExercise(ExerciseEntity exercise);
-
     void deleteExercise(Long id);
 
 }
