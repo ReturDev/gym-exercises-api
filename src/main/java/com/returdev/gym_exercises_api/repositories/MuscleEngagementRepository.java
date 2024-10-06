@@ -21,4 +21,9 @@ public interface MuscleEngagementRepository extends JpaRepository<MuscleEngageme
     @Query("SELECT me.id FROM MuscleEngagementEntity me WHERE me.muscle = :muscle AND me.muscleActivationLevel = :activationLevel")
     Optional<Long> findIdByMuscleAndActivationLevel(@Param("muscle") Muscle muscle, @Param("activationLevel") MuscleActivationLevel activationLevel);
 
+    @Query("SELECT me FROM MuscleEngagementEntity me WHERE me.muscle IN :muscles AND me.muscleActivationLevel IN :activationLevels")
+    List<MuscleEngagementEntity> findByMusclesAndActivationLevels(@Param("muscles") List<Muscle> muscles, @Param("activationLevels") List<MuscleActivationLevel> activationLevels);
+
+
+
 }
