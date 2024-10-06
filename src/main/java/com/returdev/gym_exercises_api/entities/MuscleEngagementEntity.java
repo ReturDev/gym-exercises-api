@@ -25,8 +25,7 @@ import java.util.List;
 public class MuscleEngagementEntity {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.SEQUENCE)
-    @SequenceGenerator(name = "muscle_engagement_sequence", allocationSize = 1)
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "muscle_engagement_id")
     private Long id;
 
