@@ -21,16 +21,18 @@ class MuscleEngagementRepositoryTest {
     @Autowired
     private MuscleEngagementRepository repository;
 
-    private final MuscleEngagementEntity muscleEngagementEntity = new MuscleEngagementEntity(
-            null,
-            Muscle.BICEPS,
-            MuscleActivationLevel.HIGH,
-            null
+    private final List<MuscleEngagementEntity> muscleEngagementEntities = List.of(
+            new MuscleEngagementEntity(null, Muscle.BICEPS, MuscleActivationLevel.HIGH, null),
+            new MuscleEngagementEntity(null, Muscle.TRAPEZES, MuscleActivationLevel.HIGH, null),
+            new MuscleEngagementEntity(null, Muscle.BUTTOCKS, MuscleActivationLevel.MEDIUM, null),
+            new MuscleEngagementEntity(null, Muscle.ABS, MuscleActivationLevel.LOW, null),
+            new MuscleEngagementEntity(null, Muscle.WIDE_BACK, MuscleActivationLevel.LOW, null),
+            new MuscleEngagementEntity(null, Muscle.LOWER_CHEST, MuscleActivationLevel.MEDIUM, null)
     );
 
     @BeforeEach
     void setUp() {
-        repository.save(muscleEngagementEntity);
+        repository.saveAll(muscleEngagementEntities);
     }
 
     @Test
@@ -39,7 +41,7 @@ class MuscleEngagementRepositoryTest {
         List<MuscleEngagementEntity> muscles = repository.findByMuscle(Muscle.BICEPS);
 
         assertFalse(muscles.isEmpty());
-        assertEquals(muscleEngagementEntity, muscles.get(0));
+        assertEquals(muscleEngagementEntities.get(0), muscles.get(0));
 
     }
 
@@ -49,7 +51,7 @@ class MuscleEngagementRepositoryTest {
         List<MuscleEngagementEntity> muscles = repository.findByMuscleActivationLevel(MuscleActivationLevel.HIGH);
 
         assertFalse(muscles.isEmpty());
-        assertEquals(muscleEngagementEntity, muscles.get(0));
+        assertEquals(muscleEngagementEntities.get(0), muscles.get(0));
 
     }
 
@@ -62,4 +64,25 @@ class MuscleEngagementRepositoryTest {
 
     }
 
+    @Test
+    void findByMusclesAndActivationLevels() {
+
+        List<MuscleEngagementEntity> muscleEngagementsToFind = muscleEngagementEntities.subList(0, 3);
+        List<Muscle> musclesToFind = muscleEngagementsToFind.stream()
+                .map(MuscleEngagementEntity::getMuscle)
+                .toList();
+        List<MuscleActivationLevel> activationLevelsToFind = muscleEngagementsToFind.stream()
+                .map(MuscleEngagementEntity::getMuscleActivationLevel)
+                .toList();
+
+
+        List<MuscleEngagementEntity> result = repository.findByMusclesAndActivationLevels(
+                musclesToFind,
+                activationLevelsToFind
+        );
+
+        assertFalse(result.isEmpty());
+        assertEquals(muscleEngagementsToFind.size(), result.size());
+
+    }
 }
