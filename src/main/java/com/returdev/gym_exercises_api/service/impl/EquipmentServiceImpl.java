@@ -26,7 +26,7 @@ public class EquipmentServiceImpl implements EquipmentService {
     @Override
     public Optional<EquipmentEntity> getEquipmentById(Long id) {
 
-        serviceValidator.validateIdIsNotNull(id);
+        serviceValidator.validateGetEquipmentById(id);
 
         return equipmentRepository.findById(id);
 
