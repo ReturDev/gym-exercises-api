@@ -6,7 +6,6 @@ import com.returdev.gym_exercises_api.service.EquipmentService;
 import com.returdev.gym_exercises_api.service.ExerciseService;
 import com.returdev.gym_exercises_api.service.MuscleEngagementService;
 import com.returdev.gym_exercises_api.service.validators.ServiceValidator;
-import jakarta.validation.Valid;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
@@ -38,7 +37,7 @@ public class ExerciseServiceImpl implements ExerciseService {
     @Override
     public Optional<ExerciseEntity> getExerciseById(Long id) {
 
-        serviceValidator.validateIdIsNotNull(id);
+        serviceValidator.validateGetExerciseById(id);
 
         return exerciseRepository.findById(id);
 
