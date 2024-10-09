@@ -20,7 +20,7 @@ import org.springframework.hateoas.server.core.Relation;
 public class EquipmentEntity {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.SEQUENCE)
+    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "equipment_sequence")
     @SequenceGenerator(name = "equipment_sequence", allocationSize = 1)
     @Column(name = "equipment_id")
     private Long id;
