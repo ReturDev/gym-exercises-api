@@ -11,11 +11,11 @@ public record ExerciseRequestDTO(
         Long id,
         @NotBlank String name,
         String description,
-        @NotNull Integer equipmentId,
+        @NotNull Long equipmentId,
         @Valid  @NotEmpty Set<MuscleEngagementRequestDTO> muscleEngagements
 ) {
 
-    public ExerciseRequestDTO(Long id, @NotBlank String name, String description, @NotNull Integer equipmentId, @Valid @NotEmpty Set<MuscleEngagementRequestDTO> muscleEngagements) {
+    public ExerciseRequestDTO(Long id, @NotBlank String name, String description, @NotNull Long equipmentId, @Valid @NotEmpty Set<MuscleEngagementRequestDTO> muscleEngagements) {
         this.id = id;
         this.name = name;
         this.description = description == null ? "" : description;
