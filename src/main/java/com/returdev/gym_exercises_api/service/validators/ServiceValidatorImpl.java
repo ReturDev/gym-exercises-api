@@ -24,7 +24,7 @@ public class ServiceValidatorImpl implements ServiceValidator {
     private static final String EXERCISE_SAVE_ID_NOT_NULL_RESOURCE = "exception.exercise.save.id_is_not_null";
     private static final String EXERCISE_UPDATE_ID_NULL_RESOURCE = "exception.exercise.update.id_is_null";
     private static final String EXERCISE_NOT_EXISTS_BY_ID_RESOURCE = "exception.exercise.not_exists_by_id";
-    private static final String EQUIPMENT_NOT_EXISTS_BY_NAME_RESOURCE = "exception.equipment.not_exists_by_name";
+    private static final String EQUIPMENT_EXISTS_BY_NAME_RESOURCE = "exception.equipment.exists_by_name";
     private static final String EXERCISE_EXISTS_BY_NAME_AND_EQUIPMENT_ID_RESOURCE = "exception.exercise.exists_by_name_and_equipment_id";
 
 
@@ -246,17 +246,16 @@ public class ServiceValidatorImpl implements ServiceValidator {
             Function<List<MuscleEngagementEntity>, List<MuscleEngagementEntity>> getMuscleEngagementsWithId
     ) {
 
-        String updatedName = partialUpdateExercise.getName().isBlank()
-                ? persistedExercise.getName()
-                : partialUpdateExercise.getName();
+        String updatedName = Optional.ofNullable(partialUpdateExercise.getName())
+                .filter(it -> !it.isBlank())
+                .orElse(persistedExercise.getName());
 
-        String updatedDescription = partialUpdateExercise.getDescription().isBlank()
-                ? persistedExercise.getDescription()
-                : partialUpdateExercise.getDescription();
+        String updatedDescription = Optional.ofNullable(partialUpdateExercise.getDescription()).filter(it -> !it.isBlank())
+                .orElse(persistedExercise.getDescription());
 
         EquipmentEntity updatedEquipment = Optional.ofNullable(partialUpdateExercise.getEquipment())
                 .map(equipment -> getEquipmentById.apply(equipment.getId())
-                        .orElseThrow(() -> new IllegalArgumentException(
+                        .orElseThrow(() -> new EntityNotFoundException(
                                 messageManager.getMessageWithParams(
                                         EQUIPMENT_NOT_EXISTS_BY_ID_RESOURCE,
                                         new Long[]{equipment.getId()}
@@ -266,12 +265,13 @@ public class ServiceValidatorImpl implements ServiceValidator {
                 .orElse(persistedExercise.getEquipment());
 
 
-        List<MuscleEngagementEntity> updatedMuscleEngagements = partialUpdateExercise.getMusclesEngagement().isEmpty()
-                ? persistedExercise.getMusclesEngagement()
-                : getMuscleEngagementsWithId.apply(partialUpdateExercise.getMusclesEngagement());
+        List<MuscleEngagementEntity> updatedMuscleEngagements = Optional.ofNullable(partialUpdateExercise.getMusclesEngagement())
+                .filter(it -> !it.isEmpty()).orElse(persistedExercise.getMusclesEngagement());
 
+        if (!updatedName.equals(persistedExercise.getName()) || !updatedEquipment.getId().equals(persistedExercise.getId())) {
+            exerciseExistsByNameAndEquipmentId(updatedName, updatedEquipment.getId(), existsByNameAndEquipmentId);
+        }
 
-        exerciseExistsByNameAndEquipmentId(updatedName, updatedEquipment.getId(), existsByNameAndEquipmentId);
 
         return new ExerciseEntity(
                 persistedExercise.getId(),
@@ -299,7 +299,7 @@ public class ServiceValidatorImpl implements ServiceValidator {
         if (existsByName.test(name)) {
             throw new EntityExistsException(
                     messageManager.getMessageWithParams(
-                            EQUIPMENT_NOT_EXISTS_BY_NAME_RESOURCE,
+                            EQUIPMENT_EXISTS_BY_NAME_RESOURCE,
                             new String[]{name}
                     )
             );
