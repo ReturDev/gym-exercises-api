@@ -79,14 +79,21 @@ public class EntityDtoMapperImpl implements EntityDtoMapper {
 
     @Override
     public ExerciseEntity exerciseRequestDtoToEntity(ExerciseRequestDTO exerciseRequestDTO) {
+
+        EquipmentEntity equipmentEntity = exerciseRequestDTO.equipmentId() == null ? null :
+                new EquipmentEntity(exerciseRequestDTO.equipmentId(), null);
+
+        List<MuscleEngagementEntity> muscleEngagementEntities = exerciseRequestDTO.muscleEngagements() == null ? null :
+                exerciseRequestDTO.muscleEngagements().stream()
+                        .map(this::muscleEngagementRequestDtoToEntity)
+                        .toList();
+
         return new ExerciseEntity(
                 exerciseRequestDTO.id(),
                 exerciseRequestDTO.name(),
                 exerciseRequestDTO.description(),
-                new EquipmentEntity(exerciseRequestDTO.equipmentId(), null),
-                exerciseRequestDTO.muscleEngagements().stream()
-                        .map(this::muscleEngagementRequestDtoToEntity)
-                        .toList()
+                equipmentEntity,
+                muscleEngagementEntities
         );
     }
 
