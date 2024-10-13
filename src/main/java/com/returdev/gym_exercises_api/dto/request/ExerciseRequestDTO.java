@@ -4,12 +4,15 @@ import jakarta.validation.Valid;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotEmpty;
 import jakarta.validation.constraints.NotNull;
+import jakarta.validation.constraints.Size;
 
 import java.util.Set;
 
 public record ExerciseRequestDTO(
         Long id,
-        @NotBlank(message = "{validation.not_blank.message}") String name,
+        @NotBlank(message = "{validation.not_blank.message}")
+        @Size(min = 10, max = 50, message = "{validation.size.message}")
+        String name,
         String description,
         @NotNull(message = "{validation.not_null.message}") Long equipmentId,
         @Valid
