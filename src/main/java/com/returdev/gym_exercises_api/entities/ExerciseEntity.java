@@ -4,6 +4,7 @@ import jakarta.persistence.*;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotEmpty;
 import jakarta.validation.constraints.NotNull;
+import jakarta.validation.constraints.Size;
 import lombok.*;
 import org.hibernate.validator.constraints.Length;
 import org.springframework.hateoas.server.core.Relation;
@@ -30,23 +31,25 @@ public class ExerciseEntity {
     @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "exercises_sequence")
     @SequenceGenerator(name = "exercises_sequence", allocationSize = 1)
     @Column(name = "exercise_id")
-    @NotNull
+    @NotNull(message = "{validation.not_null.message}")
     private Long id;
 
     @Column(name = "name", nullable = false)
-    @NotBlank
-    @Length(
-        min = 4
+    @NotBlank(message = "{validation.not_blank.message}")
+    @Size(
+            min = 10,
+            max = 50,
+            message = "{validation.size.message}"
     )
     private String name;
 
     @Column(name = "description", nullable = false)
-    @NotNull
+    @NotNull(message = "{validation.not_null.message}")
     private String description;
 
     @ManyToOne
     @JoinColumn(name = "equipment_id", nullable = false)
-    @NotNull
+    @NotNull(message = "{validation.not_null.message}")
     private EquipmentEntity equipment;
 
     @ManyToMany(
@@ -58,7 +61,7 @@ public class ExerciseEntity {
             joinColumns = @JoinColumn(name = "exercise_id"),
             inverseJoinColumns = @JoinColumn(name = "muscle_engagement_id")
     )
-    @NotEmpty
+    @NotEmpty(message = "{validation.not_empty.message}")
     private List<MuscleEngagementEntity> musclesEngagement;
 
 }
