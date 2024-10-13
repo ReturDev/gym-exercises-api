@@ -5,6 +5,6 @@ import com.returdev.gym_exercises_api.enums.MuscleActivationLevel;
 import jakarta.validation.constraints.NotNull;
 
 public record MuscleEngagementRequestDTO(
-        @NotNull Muscle muscle,
-        @NotNull MuscleActivationLevel muscleActivationLevel
+        @NotNull(message = "{validation.not_null.message}") Muscle muscle,
+        @NotNull(message = "{validation.not_null.message}") MuscleActivationLevel muscleActivationLevel
 ) {}
