@@ -15,9 +15,13 @@ public abstract class PaginationRequestDTO {
     public static final int DEFAULT_PAGE_SIZE = 25;
     public static final String DEFAULT_SORT_DIRECTION = Sort.Direction.ASC.name();
 
-    @Min(value = 1) protected Integer page;
-    @Min(value = 1) @Max(DEFAULT_PAGE_SIZE) protected Integer pageSize;
-    @Pattern(regexp = "(?i)ASC|DESC")protected String sortDirection;
+    @Min(value = 1, message = "{validation.min_value.message}")
+    protected Integer page;
+    @Min(value = 1, message = "{validation.min_value.message}")
+    @Max(value = DEFAULT_PAGE_SIZE, message = "{validation.max_value.message}")
+    protected Integer pageSize;
+    @Pattern(regexp = "(?i)ASC|DESC", message = "{validation.pagination_request_dto.sort_direction.message}")
+    protected String sortDirection;
 
     protected PaginationRequestDTO(Integer page, Integer pageSize, String sortDirection) {
         this.page = (page != null) ? page : DEFAULT_PAGE;
