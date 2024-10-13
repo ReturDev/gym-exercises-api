@@ -9,13 +9,14 @@ import java.util.Set;
 
 public record ExerciseRequestDTO(
         Long id,
-        @NotBlank String name,
+        @NotBlank(message = "{validation.not_blank.message}") String name,
         String description,
-        @NotNull Long equipmentId,
-        @Valid  @NotEmpty Set<MuscleEngagementRequestDTO> muscleEngagements
+        @NotNull(message = "{validation.not_null.message}") Long equipmentId,
+        @Valid
+        @NotEmpty(message = "{validation.not_empty.message}") Set<MuscleEngagementRequestDTO> muscleEngagements
 ) {
 
-    public ExerciseRequestDTO(Long id, @NotBlank String name, String description, @NotNull Long equipmentId, @Valid @NotEmpty Set<MuscleEngagementRequestDTO> muscleEngagements) {
+    public ExerciseRequestDTO(Long id, String name, String description, Long equipmentId, Set<MuscleEngagementRequestDTO> muscleEngagements) {
         this.id = id;
         this.name = name;
         this.description = description == null ? "" : description;
