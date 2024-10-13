@@ -1,10 +1,12 @@
 package com.returdev.gym_exercises_api.dto.request.pagination;
 
 import jakarta.validation.constraints.Pattern;
+import lombok.AllArgsConstructor;
 
 public class EquipmentPaginationRequestDTO extends PaginationRequestDTO {
 
-    @Pattern(regexp = "(?i)ID|NAME") private final String orderBy;
+    @Pattern(regexp = "(?i)ID|NAME", message = "{validation.equipment_pagination_request_dto.order_by.message}")
+    private final String orderBy;
 
     public EquipmentPaginationRequestDTO(
             Integer page,
@@ -21,16 +23,13 @@ public class EquipmentPaginationRequestDTO extends PaginationRequestDTO {
         return EquipmentOrderByField.fromString(orderBy);
     }
 
+    @AllArgsConstructor
     private enum EquipmentOrderByField {
 
         ID("id"),
         NAME("name");
 
         public final String entityPropertyName;
-
-        EquipmentOrderByField(String entityPropertyName) {
-            this.entityPropertyName = entityPropertyName;
-        }
 
         public static String fromString(String value) {
             return valueOf(value.toUpperCase()).entityPropertyName;
