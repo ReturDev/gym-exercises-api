@@ -31,12 +31,13 @@ public class MuscleEngagementEntity {
 
     @Column(name = "muscle", nullable = false)
     @Enumerated(EnumType.STRING)
-    @NotNull
+    @NotNull(message = "{validation.not_null.message}")
+
     private Muscle muscle;
 
     @Column(name = "activation_level", nullable = false)
     @Enumerated(EnumType.STRING)
-    @NotNull
+    @NotNull(message = "{validation.not_null.message}")
     private MuscleActivationLevel muscleActivationLevel;
 
     @ManyToMany(mappedBy = "musclesEngagement")
