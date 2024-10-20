@@ -1,28 +1,29 @@
 package com.returdev.gym_exercises_api.controller;
 
-import com.returdev.gym_exercises_api.config.ApplicationConfig;
 import com.returdev.gym_exercises_api.dto.request.EquipmentRequestDTO;
 import com.returdev.gym_exercises_api.dto.request.pagination.EquipmentPaginationRequestDTO;
 import com.returdev.gym_exercises_api.dto.response.ContentResponseDTO;
 import com.returdev.gym_exercises_api.dto.response.EquipmentResponseDTO;
-import com.returdev.gym_exercises_api.entities.EquipmentEntity;
 import com.returdev.gym_exercises_api.mappers.EntityDtoMapper;
-import com.returdev.gym_exercises_api.service.EquipmentService;
+import com.returdev.gym_exercises_api.model.entities.EquipmentEntity;
+import com.returdev.gym_exercises_api.service.data.equipment.EquipmentService;
 import jakarta.validation.Valid;
-import lombok.AllArgsConstructor;
+import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import java.net.URI;
 import java.util.List;
 
 @RestController
-@RequestMapping(ApplicationConfig.API_VERSION + "/equipment")
-@AllArgsConstructor
+@RequestMapping("v1/equipment")
+@RequiredArgsConstructor
+@PreAuthorize("isAuthenticated()")
 public class EquipmentController {
 
-    private static final String EQUIPMENT_RESOURCE_PATH = ApplicationConfig.API_VERSION + "/equipment";
+    private static final String EQUIPMENT_RESOURCE_PATH = "v1/equipment";
 
     private final EquipmentService equipmentService;
     private final EntityDtoMapper mapper;
@@ -56,6 +57,7 @@ public class EquipmentController {
 
 
     @PostMapping()
+    @PreAuthorize("hasRole('DEVELOPER')")
     public ResponseEntity<ContentResponseDTO<EquipmentResponseDTO>> saveEquipment(
             @RequestBody @Valid EquipmentRequestDTO equipmentRequestDTO
     ) {
@@ -76,6 +78,7 @@ public class EquipmentController {
     }
 
     @PutMapping()
+    @PreAuthorize("hasRole('DEVELOPER')")
     public ResponseEntity<ContentResponseDTO<EquipmentResponseDTO>> updateEquipment(
             @RequestBody @Valid EquipmentRequestDTO equipmentRequestDTO
     ) {
@@ -96,6 +99,7 @@ public class EquipmentController {
     }
 
     @DeleteMapping("/{id}")
+    @PreAuthorize("hasRole('DEVELOPER')")
     public ResponseEntity<Void> deleteEquipment(
             @PathVariable("id") Long id
     ) {
