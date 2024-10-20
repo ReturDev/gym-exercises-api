@@ -1,6 +1,6 @@
-package com.returdev.gym_exercises_api.service;
+package com.returdev.gym_exercises_api.service.data.exercise;
 
-import com.returdev.gym_exercises_api.entities.ExerciseEntity;
+import com.returdev.gym_exercises_api.model.entities.ExerciseEntity;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 

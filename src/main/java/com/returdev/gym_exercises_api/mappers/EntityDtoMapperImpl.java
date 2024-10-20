@@ -8,9 +8,9 @@ import com.returdev.gym_exercises_api.dto.response.ContentResponseDTO;
 import com.returdev.gym_exercises_api.dto.response.EquipmentResponseDTO;
 import com.returdev.gym_exercises_api.dto.response.ExerciseResponseDTO;
 import com.returdev.gym_exercises_api.dto.response.MuscleEngagementResponseDTO;
-import com.returdev.gym_exercises_api.entities.EquipmentEntity;
-import com.returdev.gym_exercises_api.entities.ExerciseEntity;
-import com.returdev.gym_exercises_api.entities.MuscleEngagementEntity;
+import com.returdev.gym_exercises_api.model.entities.EquipmentEntity;
+import com.returdev.gym_exercises_api.model.entities.ExerciseEntity;
+import com.returdev.gym_exercises_api.model.entities.MuscleEngagementEntity;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
@@ -148,8 +148,7 @@ public class EntityDtoMapperImpl implements EntityDtoMapper {
         return new MuscleEngagementEntity(
                 null,
                 muscleEngagementRequestDTO.muscle(),
-                muscleEngagementRequestDTO.muscleActivationLevel(),
-                null
+                muscleEngagementRequestDTO.muscleActivationLevel()
         );
     }
 

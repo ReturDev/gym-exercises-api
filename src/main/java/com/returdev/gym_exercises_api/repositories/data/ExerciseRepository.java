@@ -1,8 +1,8 @@
-package com.returdev.gym_exercises_api.repositories;
+package com.returdev.gym_exercises_api.repositories.data;
 
 
-import com.returdev.gym_exercises_api.entities.ExerciseEntity;
-import com.returdev.gym_exercises_api.enums.Muscle;
+import com.returdev.gym_exercises_api.model.entities.ExerciseEntity;
+import com.returdev.gym_exercises_api.model.enums.Muscle;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;

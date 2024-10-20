@@ -1,8 +1,9 @@
 package com.returdev.gym_exercises_api.repositories;
 
-import com.returdev.gym_exercises_api.entities.MuscleEngagementEntity;
-import com.returdev.gym_exercises_api.enums.Muscle;
-import com.returdev.gym_exercises_api.enums.MuscleActivationLevel;
+import com.returdev.gym_exercises_api.model.entities.MuscleEngagementEntity;
+import com.returdev.gym_exercises_api.model.enums.Muscle;
+import com.returdev.gym_exercises_api.model.enums.MuscleActivationLevel;
+import com.returdev.gym_exercises_api.repositories.data.MuscleEngagementRepository;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -22,12 +23,12 @@ class MuscleEngagementRepositoryTest {
     private MuscleEngagementRepository repository;
 
     private final List<MuscleEngagementEntity> muscleEngagementEntities = List.of(
-            new MuscleEngagementEntity(null, Muscle.BICEPS, MuscleActivationLevel.HIGH, null),
-            new MuscleEngagementEntity(null, Muscle.TRAPEZES, MuscleActivationLevel.HIGH, null),
-            new MuscleEngagementEntity(null, Muscle.BUTTOCKS, MuscleActivationLevel.MEDIUM, null),
-            new MuscleEngagementEntity(null, Muscle.ABS, MuscleActivationLevel.LOW, null),
-            new MuscleEngagementEntity(null, Muscle.WIDE_BACK, MuscleActivationLevel.LOW, null),
-            new MuscleEngagementEntity(null, Muscle.LOWER_CHEST, MuscleActivationLevel.MEDIUM, null)
+            new MuscleEngagementEntity(null, Muscle.BICEPS, MuscleActivationLevel.HIGH),
+            new MuscleEngagementEntity(null, Muscle.TRAPEZES, MuscleActivationLevel.HIGH),
+            new MuscleEngagementEntity(null, Muscle.BUTTOCKS, MuscleActivationLevel.MEDIUM),
+            new MuscleEngagementEntity(null, Muscle.ABS, MuscleActivationLevel.LOW),
+            new MuscleEngagementEntity(null, Muscle.WIDE_BACK, MuscleActivationLevel.LOW),
+            new MuscleEngagementEntity(null, Muscle.LOWER_CHEST, MuscleActivationLevel.MEDIUM)
     );
 
     @BeforeEach

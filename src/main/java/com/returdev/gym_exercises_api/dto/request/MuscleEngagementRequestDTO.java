@@ -1,7 +1,7 @@
 package com.returdev.gym_exercises_api.dto.request;
 
-import com.returdev.gym_exercises_api.enums.Muscle;
-import com.returdev.gym_exercises_api.enums.MuscleActivationLevel;
+import com.returdev.gym_exercises_api.model.enums.Muscle;
+import com.returdev.gym_exercises_api.model.enums.MuscleActivationLevel;
 import jakarta.validation.constraints.NotNull;
 
 public record MuscleEngagementRequestDTO(

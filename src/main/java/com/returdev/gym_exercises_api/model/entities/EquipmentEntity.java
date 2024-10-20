@@ -1,4 +1,4 @@
-package com.returdev.gym_exercises_api.entities;
+package com.returdev.gym_exercises_api.model.entities;
 
 
 import jakarta.persistence.*;

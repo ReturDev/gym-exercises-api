@@ -1,10 +1,13 @@
 package com.returdev.gym_exercises_api.repositories;
 
-import com.returdev.gym_exercises_api.entities.EquipmentEntity;
-import com.returdev.gym_exercises_api.entities.ExerciseEntity;
-import com.returdev.gym_exercises_api.entities.MuscleEngagementEntity;
-import com.returdev.gym_exercises_api.enums.Muscle;
-import com.returdev.gym_exercises_api.enums.MuscleActivationLevel;
+import com.returdev.gym_exercises_api.model.entities.EquipmentEntity;
+import com.returdev.gym_exercises_api.model.entities.ExerciseEntity;
+import com.returdev.gym_exercises_api.model.entities.MuscleEngagementEntity;
+import com.returdev.gym_exercises_api.model.enums.Muscle;
+import com.returdev.gym_exercises_api.model.enums.MuscleActivationLevel;
+import com.returdev.gym_exercises_api.repositories.data.EquipmentRepository;
+import com.returdev.gym_exercises_api.repositories.data.ExerciseRepository;
+import com.returdev.gym_exercises_api.repositories.data.MuscleEngagementRepository;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -16,7 +19,6 @@ import org.springframework.test.context.ActiveProfiles;
 
 import java.util.List;
 import java.util.Optional;
-import java.util.stream.Stream;
 
 import static org.junit.jupiter.api.Assertions.*;
 
@@ -49,10 +51,10 @@ class ExerciseRepositoryTest {
     );
 
     private final List<MuscleEngagementEntity> muscleEngagementEntityList = List.of(
-            new MuscleEngagementEntity(null, Muscle.BICEPS, MuscleActivationLevel.HIGH, null),
-            new MuscleEngagementEntity(null, Muscle.DORSALS, MuscleActivationLevel.LOW, null),
-            new MuscleEngagementEntity(null, Muscle.HAMSTRINGS, MuscleActivationLevel.LOW, null),
-            new MuscleEngagementEntity(null, Muscle.FOREARMS, MuscleActivationLevel.MEDIUM, null)
+            new MuscleEngagementEntity(null, Muscle.BICEPS, MuscleActivationLevel.HIGH),
+            new MuscleEngagementEntity(null, Muscle.DORSALS, MuscleActivationLevel.LOW),
+            new MuscleEngagementEntity(null, Muscle.HAMSTRINGS, MuscleActivationLevel.LOW),
+            new MuscleEngagementEntity(null, Muscle.FOREARMS, MuscleActivationLevel.MEDIUM)
     );
 
     private final List<ExerciseEntity> exerciseEntityList = List.of(

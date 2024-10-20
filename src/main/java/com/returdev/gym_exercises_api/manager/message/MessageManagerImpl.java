@@ -1,4 +1,4 @@
-package com.returdev.gym_exercises_api.util.message;
+package com.returdev.gym_exercises_api.manager.message;
 
 import org.springframework.context.MessageSource;
 import org.springframework.context.i18n.LocaleContextHolder;

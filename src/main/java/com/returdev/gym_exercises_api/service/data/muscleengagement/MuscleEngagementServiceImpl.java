@@ -1,8 +1,7 @@
-package com.returdev.gym_exercises_api.service.impl;
+package com.returdev.gym_exercises_api.service.data.muscleengagement;
 
-import com.returdev.gym_exercises_api.entities.MuscleEngagementEntity;
-import com.returdev.gym_exercises_api.repositories.MuscleEngagementRepository;
-import com.returdev.gym_exercises_api.service.MuscleEngagementService;
+import com.returdev.gym_exercises_api.model.entities.MuscleEngagementEntity;
+import com.returdev.gym_exercises_api.repositories.data.MuscleEngagementRepository;
 import org.springframework.stereotype.Service;
 
 import java.util.List;

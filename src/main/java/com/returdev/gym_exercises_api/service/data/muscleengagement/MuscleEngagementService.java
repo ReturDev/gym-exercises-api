@@ -1,6 +1,6 @@
-package com.returdev.gym_exercises_api.service;
+package com.returdev.gym_exercises_api.service.data.muscleengagement;
 
-import com.returdev.gym_exercises_api.entities.MuscleEngagementEntity;
+import com.returdev.gym_exercises_api.model.entities.MuscleEngagementEntity;
 
 import java.util.List;
 import java.util.Optional;

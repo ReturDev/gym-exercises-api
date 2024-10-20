@@ -1,9 +1,8 @@
-package com.returdev.gym_exercises_api.service.impl;
+package com.returdev.gym_exercises_api.service.data.equipment;
 
-import com.returdev.gym_exercises_api.entities.EquipmentEntity;
-import com.returdev.gym_exercises_api.repositories.EquipmentRepository;
-import com.returdev.gym_exercises_api.service.EquipmentService;
-import com.returdev.gym_exercises_api.service.validators.ServiceValidator;
+import com.returdev.gym_exercises_api.model.entities.EquipmentEntity;
+import com.returdev.gym_exercises_api.repositories.data.EquipmentRepository;
+import com.returdev.gym_exercises_api.service.data.validators.ServiceValidator;
 import jakarta.transaction.Transactional;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;

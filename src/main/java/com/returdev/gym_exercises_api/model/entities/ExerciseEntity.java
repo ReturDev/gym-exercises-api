@@ -1,4 +1,4 @@
-package com.returdev.gym_exercises_api.entities;
+package com.returdev.gym_exercises_api.model.entities;
 
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotBlank;
@@ -6,7 +6,6 @@ import jakarta.validation.constraints.NotEmpty;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Size;
 import lombok.*;
-import org.hibernate.validator.constraints.Length;
 import org.springframework.hateoas.server.core.Relation;
 
 import java.util.List;

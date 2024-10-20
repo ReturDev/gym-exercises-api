@@ -1,7 +1,7 @@
-package com.returdev.gym_exercises_api.service.validators;
+package com.returdev.gym_exercises_api.service.data.validators;
 
-import com.returdev.gym_exercises_api.entities.EquipmentEntity;
-import com.returdev.gym_exercises_api.entities.ExerciseEntity;
+import com.returdev.gym_exercises_api.model.entities.EquipmentEntity;
+import com.returdev.gym_exercises_api.model.entities.ExerciseEntity;
 import jakarta.persistence.EntityExistsException;
 import jakarta.persistence.EntityNotFoundException;
 import org.junit.jupiter.api.Test;

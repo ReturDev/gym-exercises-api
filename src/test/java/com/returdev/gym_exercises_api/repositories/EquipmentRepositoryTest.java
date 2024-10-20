@@ -1,6 +1,7 @@
 package com.returdev.gym_exercises_api.repositories;
 
-import com.returdev.gym_exercises_api.entities.EquipmentEntity;
+import com.returdev.gym_exercises_api.model.entities.EquipmentEntity;
+import com.returdev.gym_exercises_api.repositories.data.EquipmentRepository;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;

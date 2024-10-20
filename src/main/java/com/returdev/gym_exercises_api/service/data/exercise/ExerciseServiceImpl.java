@@ -1,11 +1,10 @@
-package com.returdev.gym_exercises_api.service.impl;
+package com.returdev.gym_exercises_api.service.data.exercise;
 
-import com.returdev.gym_exercises_api.entities.ExerciseEntity;
-import com.returdev.gym_exercises_api.repositories.ExerciseRepository;
-import com.returdev.gym_exercises_api.service.EquipmentService;
-import com.returdev.gym_exercises_api.service.ExerciseService;
-import com.returdev.gym_exercises_api.service.MuscleEngagementService;
-import com.returdev.gym_exercises_api.service.validators.ServiceValidator;
+import com.returdev.gym_exercises_api.model.entities.ExerciseEntity;
+import com.returdev.gym_exercises_api.repositories.data.ExerciseRepository;
+import com.returdev.gym_exercises_api.service.data.equipment.EquipmentService;
+import com.returdev.gym_exercises_api.service.data.muscleengagement.MuscleEngagementService;
+import com.returdev.gym_exercises_api.service.data.validators.ServiceValidator;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;

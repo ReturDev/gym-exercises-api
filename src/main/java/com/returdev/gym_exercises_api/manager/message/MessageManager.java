@@ -1,4 +1,4 @@
-package com.returdev.gym_exercises_api.util.message;
+package com.returdev.gym_exercises_api.manager.message;
 
 public interface MessageManager {
 

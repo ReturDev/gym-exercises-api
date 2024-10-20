@@ -1,4 +1,4 @@
-package com.returdev.gym_exercises_api.enums;
+package com.returdev.gym_exercises_api.model.enums;
 
 import com.fasterxml.jackson.annotation.JsonCreator;
 import com.returdev.gym_exercises_api.exceptions.InvalidEnumValueException;
@@ -6,16 +6,38 @@ import com.returdev.gym_exercises_api.exceptions.InvalidEnumValueException;
 import java.util.Arrays;
 import java.util.List;
 
-public enum MuscleActivationLevel {
+public enum Muscle {
 
-    HIGH,
-    MEDIUM,
-    LOW;
+    UPPER_CHEST,
+    LOWER_CHEST,
+    INNER_CHEST,
+
+    DORSALS,
+    WIDE_BACK,
+    RHOMBOIDS,
+    TRAPEZES,
+    LUMBAR,
+
+    ANTERIOR_DELTOID,
+    LATERAL_DELTOID,
+    POSTERIOR_DELTOID,
+
+    QUADRICEPS,
+    HAMSTRINGS,
+    CALVES,
+    BUTTOCKS,
+
+    BICEPS,
+    TRICEPS,
+    FOREARMS,
+
+    ABS,
+    OBLIQUES;
 
     @JsonCreator
-    public static MuscleActivationLevel fromString(String value) throws IllegalArgumentException {
+    public static Muscle fromString(String value) throws IllegalArgumentException {
         try{
-            return MuscleActivationLevel.valueOf(value.toUpperCase());
+            return Muscle.valueOf(value.toUpperCase());
         }catch (IllegalArgumentException ex){
             throw new InvalidEnumValueException(
                     value,
@@ -26,8 +48,8 @@ public enum MuscleActivationLevel {
     }
 
     private static String validValues(){
-        List<String> names = Arrays.stream(MuscleActivationLevel.values())
-                .map(MuscleActivationLevel::name)
+        List<String> names = Arrays.stream(Muscle.values())
+                .map(Muscle::name)
                 .toList();
         return String.join(", ", names.subList(0, names.size() - 1)) + " or " + names.get(names.size() - 1);
     }

@@ -1,16 +1,13 @@
-package com.returdev.gym_exercises_api.entities;
+package com.returdev.gym_exercises_api.model.entities;
 
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
-import com.returdev.gym_exercises_api.enums.Muscle;
-import com.returdev.gym_exercises_api.enums.MuscleActivationLevel;
+import com.returdev.gym_exercises_api.model.enums.Muscle;
+import com.returdev.gym_exercises_api.model.enums.MuscleActivationLevel;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotNull;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-
-import java.util.List;
 
 @Entity
 @Table(
@@ -40,8 +37,5 @@ public class MuscleEngagementEntity {
     @NotNull(message = "{validation.not_null.message}")
     private MuscleActivationLevel muscleActivationLevel;
 
-    @ManyToMany(mappedBy = "musclesEngagement")
-    @JsonIgnore
-    private List<ExerciseEntity> exercises;
 
 }

@@ -1,8 +1,8 @@
-package com.returdev.gym_exercises_api.repositories;
+package com.returdev.gym_exercises_api.repositories.data;
 
-import com.returdev.gym_exercises_api.entities.MuscleEngagementEntity;
-import com.returdev.gym_exercises_api.enums.Muscle;
-import com.returdev.gym_exercises_api.enums.MuscleActivationLevel;
+import com.returdev.gym_exercises_api.model.entities.MuscleEngagementEntity;
+import com.returdev.gym_exercises_api.model.enums.Muscle;
+import com.returdev.gym_exercises_api.model.enums.MuscleActivationLevel;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
