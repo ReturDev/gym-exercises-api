@@ -18,16 +18,16 @@ import java.time.Instant;
 @RequiredArgsConstructor
 public class JwtManagerImpl implements JwtManager{
 
-    private final String CLAIM_ROLE_NAME = "role";
+    private final String ROLE_CLAIM_NAME = "role";
 
     @Value("${spring.jwt.private-key}")
     private String privateKey;
 
     @Value("${spring.jwt.user-generator}")
-    private String userGenerator;
+    private String issuer;
 
     @Value("${spring.jwt.token-expiration-millis}")
-    private Long tokenExpirationMillis;
+    private Long tokenExpirationDurationMillis;
 
     private final MessageManager messageManager;
 
@@ -36,13 +36,12 @@ public class JwtManagerImpl implements JwtManager{
 
         Algorithm algorithm = Algorithm.HMAC256(privateKey);
         Instant currentTime = Instant.now();
-        Instant expirationTime = currentTime.plusMillis(tokenExpirationMillis);
-        String token = JWT.create().withIssuer(userGenerator)
+        Instant expirationTime = currentTime.plusMillis(tokenExpirationDurationMillis);
+        String token = JWT.create().withIssuer(issuer)
                 .withIssuedAt(currentTime)
-                .withExpiresAt(currentTime.plusMillis(tokenExpirationMillis))
-                .withClaim(CLAIM_ROLE_NAME, "USER")
+                .withExpiresAt(expirationTime)
+                .withClaim(ROLE_CLAIM_NAME, "USER")
                 .sign(algorithm);
-
 
         return new AuthToken(
                 token,
@@ -57,7 +56,7 @@ public class JwtManagerImpl implements JwtManager{
             Algorithm algorithm = Algorithm.HMAC256(privateKey);
 
             JWTVerifier verifier = JWT.require(algorithm)
-                    .withIssuer(userGenerator)
+                    .withIssuer(issuer)
                     .build();
 
             return verifier.verify(token);
@@ -75,6 +74,6 @@ public class JwtManagerImpl implements JwtManager{
 
     @Override
     public String getTokenRole(DecodedJWT decodedJWT) {
-        return decodedJWT.getClaim(CLAIM_ROLE_NAME).asString();
+        return decodedJWT.getClaim(ROLE_CLAIM_NAME).asString();
     }
 }
