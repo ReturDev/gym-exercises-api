@@ -4,10 +4,8 @@ import com.returdev.gym_exercises_api.dto.request.EquipmentRequestDTO;
 import com.returdev.gym_exercises_api.dto.request.ExerciseRequestDTO;
 import com.returdev.gym_exercises_api.dto.request.MuscleEngagementRequestDTO;
 import com.returdev.gym_exercises_api.dto.request.pagination.PaginationRequestDTO;
-import com.returdev.gym_exercises_api.dto.response.ContentResponseDTO;
-import com.returdev.gym_exercises_api.dto.response.EquipmentResponseDTO;
-import com.returdev.gym_exercises_api.dto.response.ExerciseResponseDTO;
-import com.returdev.gym_exercises_api.dto.response.MuscleEngagementResponseDTO;
+import com.returdev.gym_exercises_api.dto.response.*;
+import com.returdev.gym_exercises_api.model.auth.AuthToken;
 import com.returdev.gym_exercises_api.model.entities.EquipmentEntity;
 import com.returdev.gym_exercises_api.model.entities.ExerciseEntity;
 import com.returdev.gym_exercises_api.model.entities.MuscleEngagementEntity;
@@ -17,6 +15,8 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Component;
 
+import java.time.Duration;
+import java.time.Instant;
 import java.util.List;
 
 @Component
@@ -105,6 +105,20 @@ public class EntityDtoMapperImpl implements EntityDtoMapper {
                 paginationRequestDTO.getPage() - 1,
                 paginationRequestDTO.getPageSize(),
                 sort
+        );
+    }
+
+    @Override
+    public TokenResponseDTO authTokenToResponse(AuthToken authToken) {
+
+        Duration tokenExpirationDuration = Duration.between(
+                Instant.now(),
+                authToken.expirationTime()
+        );
+
+        return new TokenResponseDTO(
+                authToken.token(),
+                tokenExpirationDuration
         );
     }
 
