@@ -6,6 +6,8 @@ import com.returdev.gym_exercises_api.dto.request.pagination.PaginationRequestDT
 import com.returdev.gym_exercises_api.dto.response.ContentResponseDTO;
 import com.returdev.gym_exercises_api.dto.response.EquipmentResponseDTO;
 import com.returdev.gym_exercises_api.dto.response.ExerciseResponseDTO;
+import com.returdev.gym_exercises_api.dto.response.TokenResponseDTO;
+import com.returdev.gym_exercises_api.model.auth.AuthToken;
 import com.returdev.gym_exercises_api.model.entities.EquipmentEntity;
 import com.returdev.gym_exercises_api.model.entities.ExerciseEntity;
 import org.springframework.data.domain.Page;
@@ -24,5 +26,7 @@ public interface EntityDtoMapper {
     ExerciseEntity exerciseRequestDtoToEntity(ExerciseRequestDTO exerciseRequestDTO);
 
     Pageable paginationRequestDtoToPageable(PaginationRequestDTO paginationRequestDTO);
+
+    TokenResponseDTO authTokenToResponse(AuthToken authToken);
 
 }
