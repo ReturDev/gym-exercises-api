@@ -1,29 +1,30 @@
 package com.returdev.gym_exercises_api.controller;
 
-import com.returdev.gym_exercises_api.config.ApplicationConfig;
 import com.returdev.gym_exercises_api.dto.request.ExerciseRequestDTO;
 import com.returdev.gym_exercises_api.dto.request.pagination.ExercisePaginationRequestDTO;
-import com.returdev.gym_exercises_api.dto.request.pagination.PaginationRequestDTO;
 import com.returdev.gym_exercises_api.dto.response.ContentResponseDTO;
 import com.returdev.gym_exercises_api.dto.response.ExerciseResponseDTO;
-import com.returdev.gym_exercises_api.entities.ExerciseEntity;
+import com.returdev.gym_exercises_api.model.entities.ExerciseEntity;
 import com.returdev.gym_exercises_api.mappers.EntityDtoMapper;
-import com.returdev.gym_exercises_api.service.ExerciseService;
+import com.returdev.gym_exercises_api.service.data.exercise.ExerciseService;
 import jakarta.validation.Valid;
 import lombok.AllArgsConstructor;
+import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import java.net.URI;
 import java.util.List;
 
 @RestController
-@RequestMapping(ApplicationConfig.API_VERSION + "/exercise")
-@AllArgsConstructor
+@RequestMapping("v1/exercise")
+@RequiredArgsConstructor
+@PreAuthorize("isAuthenticated()")
 public class ExerciseController {
 
-    private static final String EXERCISE_RESOURCE_PATH = ApplicationConfig.API_VERSION + "/exercise";
+    private static final String EXERCISE_RESOURCE_PATH = "v1/exercise";
 
     private final ExerciseService exerciseService;
     private final EntityDtoMapper mapper;
@@ -54,6 +55,7 @@ public class ExerciseController {
 
 
     @PostMapping()
+    @PreAuthorize("hasRole('DEVELOPER')")
     public ResponseEntity<ContentResponseDTO<ExerciseResponseDTO>> saveExercise(
             @RequestBody @Valid ExerciseRequestDTO exerciseRequestDTO
     ) {
@@ -72,6 +74,7 @@ public class ExerciseController {
     }
 
     @PutMapping()
+    @PreAuthorize("hasRole('DEVELOPER')")
     public ResponseEntity<ContentResponseDTO<ExerciseResponseDTO>> updateExercise(
             @RequestBody @Valid ExerciseRequestDTO exerciseRequestDTO
     ) {
@@ -89,6 +92,7 @@ public class ExerciseController {
     }
 
     @PatchMapping()
+    @PreAuthorize("hasRole('DEVELOPER')")
     public ResponseEntity<ContentResponseDTO<ExerciseResponseDTO>> patchExercise(
             @RequestBody ExerciseRequestDTO exerciseRequestDTO
     ) {
@@ -106,6 +110,7 @@ public class ExerciseController {
     }
 
     @DeleteMapping("/{id}")
+    @PreAuthorize("hasRole('DEVELOPER')")
     public ResponseEntity<Void> deleteExercise(
             @PathVariable("id") Long id
     ) {
