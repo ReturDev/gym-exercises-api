@@ -12,9 +12,15 @@ import java.util.function.Predicate;
 
 public interface ServiceValidator {
 
-    void validateGetExerciseById(Long id);
+    ExerciseEntity validateGetExerciseById(
+            Long id,
+            Function<Long, Optional<ExerciseEntity>> getExerciseById
+    );
 
-    void validateGetEquipmentById(Long id);
+    EquipmentEntity validateGetEquipmentById(
+            Long id,
+            Function<Long, Optional<EquipmentEntity>> getEquipmentById
+    );
 
     void validateSaveEquipment(
             EquipmentEntity equipment,
@@ -35,7 +41,7 @@ public interface ServiceValidator {
     ExerciseEntity validateSaveExercise(
             ExerciseEntity exercise,
             BiPredicate<String, Long> existsByNameAndEquipmentId,
-            Function<Long, Optional<EquipmentEntity>> getEquipmentById,
+            Function<Long, EquipmentEntity> getEquipmentById,
             Function<List<MuscleEngagementEntity>, List<MuscleEngagementEntity>> getMuscleEngagementsWithId
     );
 
@@ -44,15 +50,15 @@ public interface ServiceValidator {
             ExerciseEntity exercise,
             Predicate<Long> existsById,
             BiPredicate<String, Long> existsByNameAndEquipmentId,
-            Function<Long, Optional<EquipmentEntity>> getEquipmentById,
+            Function<Long, EquipmentEntity> getEquipmentById,
             Function<List<MuscleEngagementEntity>, List<MuscleEngagementEntity>> getMuscleEngagementsWithId
     );
 
     ExerciseEntity validatePartialUpdateExercise(
-            final ExerciseEntity exercise,
+            ExerciseEntity exercise,
             Function<Long, Optional<ExerciseEntity>> getExerciseById,
             BiPredicate<String, Long> existsByNameAndEquipmentId,
-            Function<Long, Optional<EquipmentEntity>> getEquipmentById,
+            Function<Long, EquipmentEntity> getEquipmentById,
             Function<List<MuscleEngagementEntity>, List<MuscleEngagementEntity>> getMuscleEngagementsWithId
     );
 
