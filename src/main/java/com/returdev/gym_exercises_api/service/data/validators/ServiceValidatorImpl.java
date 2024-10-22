@@ -1,11 +1,12 @@
 package com.returdev.gym_exercises_api.service.data.validators;
 
+import com.returdev.gym_exercises_api.manager.message.MessageManager;
 import com.returdev.gym_exercises_api.model.entities.EquipmentEntity;
 import com.returdev.gym_exercises_api.model.entities.ExerciseEntity;
 import com.returdev.gym_exercises_api.model.entities.MuscleEngagementEntity;
-import com.returdev.gym_exercises_api.manager.message.MessageManager;
 import jakarta.persistence.EntityExistsException;
 import jakarta.persistence.EntityNotFoundException;
+import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
 
 import java.util.List;
@@ -15,6 +16,7 @@ import java.util.function.Function;
 import java.util.function.Predicate;
 
 @Component
+@RequiredArgsConstructor
 public class ServiceValidatorImpl implements ServiceValidator {
 
     private static final String GENERIC_ID_NULL_RESOURCE = "exception.generic.id_is_null";
@@ -29,11 +31,6 @@ public class ServiceValidatorImpl implements ServiceValidator {
 
 
     private final MessageManager messageManager;
-
-    public ServiceValidatorImpl(MessageManager messageManager) {
-        this.messageManager = messageManager;
-    }
-
 
     @Override
     public void validateGetExerciseById(Long id) {
@@ -212,7 +209,7 @@ public class ServiceValidatorImpl implements ServiceValidator {
             ExerciseEntity exercise,
             BiPredicate<String, Long> existsByNameAndEquipmentId,
             Function<Long, Optional<EquipmentEntity>> getEquipmentById,
-            Function<List<MuscleEngagementEntity>, List<MuscleEngagementEntity>> getMuscleEngagementsWitId
+            Function<List<MuscleEngagementEntity>, List<MuscleEngagementEntity>> getMuscleEngagementsWithId
     ) {
 
         exerciseExistsByNameAndEquipmentId(exercise.getName(), exercise.getEquipment().getId(), existsByNameAndEquipmentId);
@@ -225,7 +222,7 @@ public class ServiceValidatorImpl implements ServiceValidator {
                         )
                 ));
 
-        List<MuscleEngagementEntity> muscleEngagementEntities = getMuscleEngagementsWitId.apply(exercise.getMusclesEngagement());
+        List<MuscleEngagementEntity> muscleEngagementEntities = getMuscleEngagementsWithId.apply(exercise.getMusclesEngagement());
 
         return new ExerciseEntity(
                 exercise.getId(),
@@ -265,13 +262,14 @@ public class ServiceValidatorImpl implements ServiceValidator {
                 .orElse(persistedExercise.getEquipment());
 
 
-        List<MuscleEngagementEntity> updatedMuscleEngagements = Optional.ofNullable(partialUpdateExercise.getMusclesEngagement())
-                .filter(it -> !it.isEmpty()).orElse(persistedExercise.getMusclesEngagement());
+        List<MuscleEngagementEntity> updatedMuscleEngagements = getMuscleEngagementsWithId.apply(
+                Optional.ofNullable(partialUpdateExercise.getMusclesEngagement())
+                        .filter(it -> !it.isEmpty()).orElse(persistedExercise.getMusclesEngagement())
+        );
 
         if (!updatedName.equals(persistedExercise.getName()) || !updatedEquipment.getId().equals(persistedExercise.getId())) {
             exerciseExistsByNameAndEquipmentId(updatedName, updatedEquipment.getId(), existsByNameAndEquipmentId);
         }
-
 
         return new ExerciseEntity(
                 persistedExercise.getId(),
