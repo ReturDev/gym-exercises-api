@@ -2,8 +2,9 @@ package com.returdev.gym_exercises_api.controller;
 
 import com.returdev.gym_exercises_api.dto.request.EquipmentRequestDTO;
 import com.returdev.gym_exercises_api.dto.request.pagination.EquipmentPaginationRequestDTO;
-import com.returdev.gym_exercises_api.dto.response.ContentResponseDTO;
 import com.returdev.gym_exercises_api.dto.response.EquipmentResponseDTO;
+import com.returdev.gym_exercises_api.dto.response.wrapper.ContentResponseDTO;
+import com.returdev.gym_exercises_api.dto.response.wrapper.PaginationResponseDTO;
 import com.returdev.gym_exercises_api.mappers.EntityDtoMapper;
 import com.returdev.gym_exercises_api.model.entities.EquipmentEntity;
 import com.returdev.gym_exercises_api.service.data.equipment.EquipmentService;
@@ -15,7 +16,6 @@ import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import java.net.URI;
-import java.util.List;
 
 @RestController
 @RequestMapping("v1/equipment")
@@ -28,9 +28,10 @@ public class EquipmentController {
     private final EquipmentService equipmentService;
     private final EntityDtoMapper mapper;
 
+
     @GetMapping
-    public ResponseEntity<ContentResponseDTO<List<EquipmentResponseDTO>>> getEquipments(
-            @Valid EquipmentPaginationRequestDTO paginationRequestDTO
+    public ResponseEntity<PaginationResponseDTO<EquipmentResponseDTO>> getEquipments(
+    @Valid EquipmentPaginationRequestDTO paginationRequestDTO
     ) {
 
         Page<EquipmentEntity> page = equipmentService.getAllEquipments(
@@ -47,12 +48,13 @@ public class EquipmentController {
     public ResponseEntity<ContentResponseDTO<EquipmentResponseDTO>> getEquipmentById(
             @PathVariable("id") Long id
     ) {
-        return equipmentService.getEquipmentById(id)
-                .map(equipment ->
-                        ResponseEntity.ok(
-                                mapper.equipmentEntityToContentResponse(equipment)
-                        )
-                ).orElse(ResponseEntity.notFound().build());
+
+        return ResponseEntity.ok(
+                mapper.equipmentEntityToContentResponse(
+                        equipmentService.getEquipmentById(id)
+                )
+        );
+
     }
 
 
