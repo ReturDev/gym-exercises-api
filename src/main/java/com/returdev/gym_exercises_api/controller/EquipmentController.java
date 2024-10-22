@@ -17,6 +17,14 @@ import org.springframework.web.bind.annotation.*;
 
 import java.net.URI;
 
+/**
+ * REST controller for managing equipment.
+ *
+ * <p>
+ * This controller provides endpoints to create, read, update, and delete equipment.
+ * It requires authentication for all actions and specific roles for modifying equipment.
+ * </p>
+ */
 @RestController
 @RequestMapping("v1/equipment")
 @RequiredArgsConstructor
@@ -28,42 +36,57 @@ public class EquipmentController {
     private final EquipmentService equipmentService;
     private final EntityDtoMapper mapper;
 
-
+    /**
+     * Retrieves a paginated list of equipment.
+     *
+     * @param paginationRequestDTO The pagination parameters.
+     * @return A response entity containing a paginated list of equipment.
+     */
     @GetMapping
     public ResponseEntity<PaginationResponseDTO<EquipmentResponseDTO>> getEquipments(
-    @Valid EquipmentPaginationRequestDTO paginationRequestDTO
+            @Valid EquipmentPaginationRequestDTO paginationRequestDTO
     ) {
-
+        // Fetch paginated equipment entities from the service
         Page<EquipmentEntity> page = equipmentService.getAllEquipments(
                 mapper.paginationRequestDtoToPageable(paginationRequestDTO)
         );
 
+        // Map the equipment entities to response DTOs and return them
         return ResponseEntity.ok(
                 mapper.equipmentEntityToContentResponse(page)
         );
-
     }
 
+    /**
+     * Retrieves equipment by its ID.
+     *
+     * @param id The ID of the equipment to retrieve.
+     * @return A response entity containing the equipment details.
+     */
     @GetMapping("/{id}")
     public ResponseEntity<ContentResponseDTO<EquipmentResponseDTO>> getEquipmentById(
             @PathVariable("id") Long id
     ) {
-
+        // Fetch the equipment entity by ID and map it to response DTO
         return ResponseEntity.ok(
                 mapper.equipmentEntityToContentResponse(
                         equipmentService.getEquipmentById(id)
                 )
         );
-
     }
 
-
+    /**
+     * Creates a new equipment.
+     *
+     * @param equipmentRequestDTO The equipment data to create.
+     * @return A response entity containing the created equipment details.
+     */
     @PostMapping()
     @PreAuthorize("hasRole('DEVELOPER')")
     public ResponseEntity<ContentResponseDTO<EquipmentResponseDTO>> saveEquipment(
             @RequestBody @Valid EquipmentRequestDTO equipmentRequestDTO
     ) {
-
+        // Save the equipment entity and map it to response DTO
         EquipmentEntity equipmentSaved = equipmentService.saveEquipment(
                 mapper.equipmentRequestDtoToEntity(equipmentRequestDTO)
         );
@@ -76,14 +99,20 @@ public class EquipmentController {
                 .body(
                         mapper.equipmentEntityToContentResponse(equipmentSaved)
                 );
-
     }
 
+    /**
+     * Updates an existing equipment.
+     *
+     * @param equipmentRequestDTO The updated equipment data.
+     * @return A response entity containing the updated equipment details.
+     */
     @PutMapping()
     @PreAuthorize("hasRole('DEVELOPER')")
     public ResponseEntity<ContentResponseDTO<EquipmentResponseDTO>> updateEquipment(
             @RequestBody @Valid EquipmentRequestDTO equipmentRequestDTO
     ) {
+        // Update the equipment entity and map it to response DTO
         EquipmentEntity equipmentUpdated = equipmentService.updateEquipment(
                 mapper.equipmentRequestDtoToEntity(equipmentRequestDTO)
         );
@@ -97,20 +126,24 @@ public class EquipmentController {
                 .body(
                         mapper.equipmentEntityToContentResponse(equipmentUpdated)
                 );
-
     }
 
+    /**
+     * Deletes equipment by its ID.
+     *
+     * @param id The ID of the equipment to delete.
+     * @return A response entity with no content.
+     */
     @DeleteMapping("/{id}")
     @PreAuthorize("hasRole('DEVELOPER')")
     public ResponseEntity<Void> deleteEquipment(
             @PathVariable("id") Long id
     ) {
-
+        // Delete the equipment by ID
         equipmentService.deleteEquipment(id);
 
         return ResponseEntity.noContent().build();
-
     }
 
-
 }
+
