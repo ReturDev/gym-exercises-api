@@ -5,6 +5,8 @@ import com.returdev.gym_exercises_api.dto.request.ExerciseRequestDTO;
 import com.returdev.gym_exercises_api.dto.request.MuscleEngagementRequestDTO;
 import com.returdev.gym_exercises_api.dto.request.pagination.PaginationRequestDTO;
 import com.returdev.gym_exercises_api.dto.response.*;
+import com.returdev.gym_exercises_api.dto.response.wrapper.ContentResponseDTO;
+import com.returdev.gym_exercises_api.dto.response.wrapper.PaginationResponseDTO;
 import com.returdev.gym_exercises_api.model.auth.AuthToken;
 import com.returdev.gym_exercises_api.model.entities.EquipmentEntity;
 import com.returdev.gym_exercises_api.model.entities.ExerciseEntity;
@@ -23,26 +25,19 @@ import java.util.List;
 public class EntityDtoMapperImpl implements EntityDtoMapper {
 
     @Override
-    public ContentResponseDTO<List<EquipmentResponseDTO>> equipmentEntityToContentResponse(Page<EquipmentEntity> equipmentEntityPage) {
+    public PaginationResponseDTO<EquipmentResponseDTO> equipmentEntityToContentResponse(Page<EquipmentEntity> equipmentEntityPage) {
 
-        ContentResponseDTO<List<EquipmentResponseDTO>> contentResponseDTO = new ContentResponseDTO<>();
-
-        contentResponseDTO.setContent(
-                equipmentEntityPage.getContent().stream().map(this::equipmentEntityToResponseDto).toList()
-        );
-
-        contentResponseDTO.setPageInfo(
+        return new PaginationResponseDTO<>(
+                equipmentEntityPage.getContent().stream().map(this::equipmentEntityToResponseDto).toList(),
                 pageToPageInfo(equipmentEntityPage)
-        );
 
-        return contentResponseDTO;
+        );
     }
 
     @Override
     public ContentResponseDTO<EquipmentResponseDTO> equipmentEntityToContentResponse(EquipmentEntity equipmentEntity) {
         return new ContentResponseDTO<>(
-                equipmentEntityToResponseDto(equipmentEntity),
-                null
+                equipmentEntityToResponseDto(equipmentEntity)
         );
     }
 
@@ -55,25 +50,20 @@ public class EntityDtoMapperImpl implements EntityDtoMapper {
     }
 
     @Override
-    public ContentResponseDTO<List<ExerciseResponseDTO>> exerciseEntityToContentResponse(Page<ExerciseEntity> exerciseEntityPage) {
-        ContentResponseDTO<List<ExerciseResponseDTO>> contentResponseDTO = new ContentResponseDTO<>();
+    public PaginationResponseDTO<ExerciseResponseDTO> exerciseEntityToContentResponse(Page<ExerciseEntity> exerciseEntityPage) {
 
-        contentResponseDTO.setContent(
-                exerciseEntityPage.getContent().stream().map(this::exerciseEntityToResponseDto).toList()
-        );
-
-        contentResponseDTO.setPageInfo(
+        return new PaginationResponseDTO<>(
+                exerciseEntityPage.getContent().stream().map(this::exerciseEntityToResponseDto).toList(),
                 pageToPageInfo(exerciseEntityPage)
+
         );
 
-        return contentResponseDTO;
     }
 
     @Override
     public ContentResponseDTO<ExerciseResponseDTO> exerciseEntityToContentResponse(ExerciseEntity exerciseEntity) {
         return new ContentResponseDTO<>(
-                exerciseEntityToResponseDto(exerciseEntity),
-                null
+                exerciseEntityToResponseDto(exerciseEntity)
         );
     }
 
@@ -122,8 +112,8 @@ public class EntityDtoMapperImpl implements EntityDtoMapper {
         );
     }
 
-    private <T> ContentResponseDTO.PageInfo pageToPageInfo(Page<T> page) {
-        return new ContentResponseDTO.PageInfo(
+    private <T> PaginationResponseDTO.PageInfo pageToPageInfo(Page<T> page) {
+        return new PaginationResponseDTO.PageInfo(
                 page.getSize(),
                 page.getTotalElements(),
                 page.getTotalPages(),
