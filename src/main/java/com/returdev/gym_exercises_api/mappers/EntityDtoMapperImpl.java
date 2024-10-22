@@ -21,19 +21,41 @@ import java.time.Duration;
 import java.time.Instant;
 import java.util.List;
 
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
+import org.springframework.stereotype.Component;
+
+/**
+ * Implementation of the {@link EntityDtoMapper} interface for mapping between
+ * entities and their corresponding DTO representations.
+ *
+ * <p>
+ * This class handles the conversion of various entities like
+ * {@link EquipmentEntity} and {@link ExerciseEntity} to their
+ * respective DTOs and vice versa. It also manages pagination
+ * requests and authentication tokens.
+ * </p>
+ */
 @Component
 public class EntityDtoMapperImpl implements EntityDtoMapper {
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public PaginationResponseDTO<EquipmentResponseDTO> equipmentEntityToContentResponse(Page<EquipmentEntity> equipmentEntityPage) {
-
         return new PaginationResponseDTO<>(
-                equipmentEntityPage.getContent().stream().map(this::equipmentEntityToResponseDto).toList(),
+                equipmentEntityPage.getContent().stream()
+                        .map(this::equipmentEntityToResponseDto)
+                        .toList(),
                 pageToPageInfo(equipmentEntityPage)
-
         );
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public ContentResponseDTO<EquipmentResponseDTO> equipmentEntityToContentResponse(EquipmentEntity equipmentEntity) {
         return new ContentResponseDTO<>(
@@ -41,6 +63,9 @@ public class EntityDtoMapperImpl implements EntityDtoMapper {
         );
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public EquipmentEntity equipmentRequestDtoToEntity(EquipmentRequestDTO equipmentRequestDTO) {
         return new EquipmentEntity(
@@ -49,17 +74,22 @@ public class EntityDtoMapperImpl implements EntityDtoMapper {
         );
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public PaginationResponseDTO<ExerciseResponseDTO> exerciseEntityToContentResponse(Page<ExerciseEntity> exerciseEntityPage) {
-
         return new PaginationResponseDTO<>(
-                exerciseEntityPage.getContent().stream().map(this::exerciseEntityToResponseDto).toList(),
+                exerciseEntityPage.getContent().stream()
+                        .map(this::exerciseEntityToResponseDto)
+                        .toList(),
                 pageToPageInfo(exerciseEntityPage)
-
         );
-
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public ContentResponseDTO<ExerciseResponseDTO> exerciseEntityToContentResponse(ExerciseEntity exerciseEntity) {
         return new ContentResponseDTO<>(
@@ -67,9 +97,11 @@ public class EntityDtoMapperImpl implements EntityDtoMapper {
         );
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public ExerciseEntity exerciseRequestDtoToEntity(ExerciseRequestDTO exerciseRequestDTO) {
-
         EquipmentEntity equipmentEntity = exerciseRequestDTO.equipmentId() == null ? null :
                 new EquipmentEntity(exerciseRequestDTO.equipmentId(), null);
 
@@ -87,6 +119,9 @@ public class EntityDtoMapperImpl implements EntityDtoMapper {
         );
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public Pageable paginationRequestDtoToPageable(PaginationRequestDTO paginationRequestDTO) {
         Sort sort = Sort.by(Sort.Direction.fromString(paginationRequestDTO.getSortDirection()), paginationRequestDTO.getOrderBy());
@@ -98,9 +133,11 @@ public class EntityDtoMapperImpl implements EntityDtoMapper {
         );
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public TokenResponseDTO authTokenToResponse(AuthToken authToken) {
-
         Duration tokenExpirationDuration = Duration.between(
                 Instant.now(),
                 authToken.expirationTime()
@@ -112,6 +149,13 @@ public class EntityDtoMapperImpl implements EntityDtoMapper {
         );
     }
 
+    /**
+     * Converts a Page object into a PageInfo DTO.
+     *
+     * @param page the page to convert
+     * @param <T> the type of content in the page
+     * @return a {@link PaginationResponseDTO.PageInfo} containing the page's information
+     */
     private <T> PaginationResponseDTO.PageInfo pageToPageInfo(Page<T> page) {
         return new PaginationResponseDTO.PageInfo(
                 page.getSize(),
@@ -121,6 +165,12 @@ public class EntityDtoMapperImpl implements EntityDtoMapper {
         );
     }
 
+    /**
+     * Converts an EquipmentEntity to an EquipmentResponseDTO.
+     *
+     * @param equipmentEntity the equipment entity to convert
+     * @return a {@link EquipmentResponseDTO} containing the equipment's information
+     */
     private EquipmentResponseDTO equipmentEntityToResponseDto(EquipmentEntity equipmentEntity) {
         return new EquipmentResponseDTO(
                 equipmentEntity.getId(),
@@ -128,6 +178,12 @@ public class EntityDtoMapperImpl implements EntityDtoMapper {
         );
     }
 
+    /**
+     * Converts an ExerciseEntity to an ExerciseResponseDTO.
+     *
+     * @param exerciseEntity the exercise entity to convert
+     * @return a {@link ExerciseResponseDTO} containing the exercise's information
+     */
     private ExerciseResponseDTO exerciseEntityToResponseDto(ExerciseEntity exerciseEntity) {
         return new ExerciseResponseDTO(
                 exerciseEntity.getId(),
@@ -140,6 +196,12 @@ public class EntityDtoMapperImpl implements EntityDtoMapper {
         );
     }
 
+    /**
+     * Converts a MuscleEngagementEntity to a MuscleEngagementResponseDTO.
+     *
+     * @param muscleEngagementEntity the muscle engagement entity to convert
+     * @return a {@link MuscleEngagementResponseDTO} containing the muscle engagement's information
+     */
     private MuscleEngagementResponseDTO muscleEngagementEntityToResponseDto(MuscleEngagementEntity muscleEngagementEntity) {
         return new MuscleEngagementResponseDTO(
                 muscleEngagementEntity.getId(),
@@ -148,6 +210,12 @@ public class EntityDtoMapperImpl implements EntityDtoMapper {
         );
     }
 
+    /**
+     * Converts a MuscleEngagementRequestDTO to a MuscleEngagementEntity.
+     *
+     * @param muscleEngagementRequestDTO the muscle engagement request DTO to convert
+     * @return a {@link MuscleEngagementEntity} containing the muscle engagement's information
+     */
     private MuscleEngagementEntity muscleEngagementRequestDtoToEntity(MuscleEngagementRequestDTO muscleEngagementRequestDTO) {
         return new MuscleEngagementEntity(
                 null,
@@ -155,5 +223,5 @@ public class EntityDtoMapperImpl implements EntityDtoMapper {
                 muscleEngagementRequestDTO.muscleActivationLevel()
         );
     }
-
 }
+
