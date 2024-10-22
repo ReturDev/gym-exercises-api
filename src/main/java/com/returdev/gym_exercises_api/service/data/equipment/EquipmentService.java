@@ -11,7 +11,7 @@ import java.util.Optional;
 @Validated
 public interface EquipmentService {
 
-    Optional<EquipmentEntity> getEquipmentById(Long id);
+    EquipmentEntity getEquipmentById(Long id);
 
     Page<EquipmentEntity> getAllEquipments(Pageable pageable);
 
