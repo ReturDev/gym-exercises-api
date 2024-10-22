@@ -1,11 +1,13 @@
 package com.returdev.gym_exercises_api.dto.request.pagination;
 
+import io.swagger.v3.oas.annotations.media.Schema;
 import jakarta.validation.constraints.Pattern;
 import lombok.AllArgsConstructor;
 
 public class EquipmentPaginationRequestDTO extends PaginationRequestDTO {
 
     @Pattern(regexp = "(?i)ID|NAME", message = "{validation.equipment_pagination_request_dto.order_by.message}")
+    @Schema(description = "Sort direction (asc or desc)", example = "asc")
     private final String orderBy;
 
     public EquipmentPaginationRequestDTO(
