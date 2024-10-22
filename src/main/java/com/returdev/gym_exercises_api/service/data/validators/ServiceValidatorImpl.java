@@ -15,6 +15,17 @@ import java.util.function.BiPredicate;
 import java.util.function.Function;
 import java.util.function.Predicate;
 
+/**
+ * Implementation of the {@link ServiceValidator} interface for validating service operations
+ * related to exercises and equipment.
+ *
+ * <p>
+ * This class provides the logic for validating the existence and state of exercises and equipment
+ * entities, ensuring that the appropriate conditions are met before performing operations like
+ * saving, updating, or deleting. It utilizes a {@link MessageManager} to retrieve localized
+ * error messages for validation exceptions.
+ * </p>
+ */
 @Component
 @RequiredArgsConstructor
 public class ServiceValidatorImpl implements ServiceValidator {
@@ -170,6 +181,16 @@ public class ServiceValidatorImpl implements ServiceValidator {
 
     }
 
+    /**
+     * Validates that the ID is not null.
+     *
+     * <p>
+     * Throws an {@link IllegalArgumentException} if the ID is null, using the provided error message resource key.
+     * </p>
+     *
+     * @param errorMsgResourceKey the resource key for the error message
+     * @param id the ID to validate
+     */
     private void validateIdIsNotNull(String errorMsgResourceKey, Long id) {
         if (id == null) {
             throw new IllegalArgumentException(
@@ -178,6 +199,16 @@ public class ServiceValidatorImpl implements ServiceValidator {
         }
     }
 
+    /**
+     * Validates that the ID is null.
+     *
+     * <p>
+     * Throws an {@link IllegalArgumentException} if the ID is not null, using the provided error message resource key.
+     * </p>
+     *
+     * @param msg the resource key for the error message
+     * @param id the ID to validate
+     */
     private void validateIdIsNull(String msg, Long id) {
         if (id != null) {
             throw new IllegalArgumentException(
@@ -186,12 +217,31 @@ public class ServiceValidatorImpl implements ServiceValidator {
         }
     }
 
+    /**
+     * Validates that the ID is not null, using a generic error message resource key.
+     *
+     * @param id the ID to validate
+     */
     public void validateIdIsNotNull(Long id) {
 
         validateIdIsNotNull(GENERIC_ID_NULL_RESOURCE, id);
 
     }
 
+    /**
+     * Validates the given exercise entity for saving or updating.
+     *
+     * <p>
+     * Checks if the exercise name already exists for the specified equipment and
+     * creates a new exercise entity with the validated fields.
+     * </p>
+     *
+     * @param exercise the exercise entity to validate
+     * @param existsByNameAndEquipmentId a predicate to check if an exercise name exists for the equipment ID
+     * @param getEquipmentById a function to retrieve an equipment entity by ID
+     * @param getMuscleEngagementsWithId a function to retrieve muscle engagements by ID
+     * @return the validated exercise entity
+     */
     private ExerciseEntity validateSaveOrUpdateExercise(
             ExerciseEntity exercise,
             BiPredicate<String, Long> existsByNameAndEquipmentId,
@@ -216,6 +266,21 @@ public class ServiceValidatorImpl implements ServiceValidator {
 
     }
 
+    /**
+     * Merges the fields of a persisted exercise entity with the fields of a partial update exercise entity.
+     *
+     * <p>
+     * Validates that the updated exercise name does not already exist for the specified equipment before returning
+     * the merged exercise entity.
+     * </p>
+     *
+     * @param persistedExercise the existing exercise entity
+     * @param partialUpdateExercise the partial update exercise entity
+     * @param existsByNameAndEquipmentId a predicate to check if an exercise name exists for the equipment ID
+     * @param getEquipmentById a function to retrieve an equipment entity by ID
+     * @param getMuscleEngagementsWithId a function to retrieve muscle engagements by ID
+     * @return the merged exercise entity
+     */
     private ExerciseEntity mergeExerciseFields(
             ExerciseEntity persistedExercise,
             ExerciseEntity partialUpdateExercise,
@@ -255,6 +320,17 @@ public class ServiceValidatorImpl implements ServiceValidator {
 
     }
 
+    /**
+     * Validates that the specified ID does not exist using the provided predicate.
+     *
+     * <p>
+     * Throws an {@link EntityNotFoundException} if the ID exists, using the provided error message resource key.
+     * </p>
+     *
+     * @param id the ID to validate
+     * @param existsById a predicate to check if an entity exists by ID
+     * @param errorMsgResourceKey the resource key for the error message
+     */
     private void notExistsById(Long id, Predicate<Long> existsById, String errorMsgResourceKey) {
         if (!existsById.test(id)) {
             throw new EntityNotFoundException(
@@ -266,6 +342,17 @@ public class ServiceValidatorImpl implements ServiceValidator {
         }
     }
 
+
+    /**
+     * Checks if equipment with the specified name already exists.
+     *
+     * <p>
+     * Throws an {@link EntityExistsException} if the name exists, using the appropriate error message.
+     * </p>
+     *
+     * @param name the name of the equipment to check
+     * @param existsByName a predicate to check if an equipment name already exists
+     */
     private void equipmentExistsByName(String name, Predicate<String> existsByName) {
 
         if (existsByName.test(name)) {
@@ -279,6 +366,17 @@ public class ServiceValidatorImpl implements ServiceValidator {
 
     }
 
+    /**
+     * Checks if an exercise with the specified name and equipment ID already exists.
+     *
+     * <p>
+     * Throws an {@link EntityExistsException} if the exercise exists, using the appropriate error message.
+     * </p>
+     *
+     * @param equipmentName the name of the exercise to check
+     * @param equipmentId the ID of the equipment associated with the exercise
+     * @param existsByNameAndEquipmentId a predicate to check if an exercise name exists for the equipment ID
+     */
     private void exerciseExistsByNameAndEquipmentId(
             String equipmentName,
             Long equipmentId,
@@ -296,6 +394,16 @@ public class ServiceValidatorImpl implements ServiceValidator {
 
     }
 
+    /**
+     * Validates that the exercise with the specified ID does not exist.
+     *
+     * <p>
+     * Throws an {@link EntityNotFoundException} if the exercise exists, using the appropriate error message.
+     * </p>
+     *
+     * @param id the ID of the exercise to validate
+     * @param existsById a predicate to check if an exercise exists by ID
+     */
     private void exerciseNotExistsById(
             Long id,
             Predicate<Long> existsById
@@ -307,6 +415,18 @@ public class ServiceValidatorImpl implements ServiceValidator {
         );
     }
 
+
+    /**
+     * Retrieves an exercise entity by ID, throwing an exception if it does not exist.
+     *
+     * <p>
+     * This method is typically used to ensure the exercise exists before performing operations on it.
+     * </p>
+     *
+     * @param id the ID of the exercise to retrieve
+     * @param getExerciseById a function to retrieve an exercise entity by ID
+     * @return the retrieved exercise entity
+     */
     private ExerciseEntity getExerciseEntityById(
             Long id,
             Function<Long, Optional<ExerciseEntity>> getExerciseById
@@ -322,6 +442,16 @@ public class ServiceValidatorImpl implements ServiceValidator {
 
     }
 
+    /**
+     * Validates that the equipment with the specified ID does not exist.
+     *
+     * <p>
+     * Throws an {@link EntityNotFoundException} if the equipment exists, using the appropriate error message.
+     * </p>
+     *
+     * @param id the ID of the equipment to validate
+     * @param existsById a predicate to check if equipment exists by ID
+     */
     private void equipmentNotExistsById(
             Long id,
             Predicate<Long> existsById
@@ -333,6 +463,18 @@ public class ServiceValidatorImpl implements ServiceValidator {
         );
     }
 
+
+    /**
+     * Retrieves an equipment entity by ID, throwing an exception if it does not exist.
+     *
+     * <p>
+     * This method is typically used to ensure the equipment exists before performing operations on it.
+     * </p>
+     *
+     * @param id the ID of the equipment to retrieve
+     * @param getEquipmentById a function to retrieve an equipment entity by ID
+     * @return the retrieved equipment entity
+     */
     private EquipmentEntity getEquipmentEntityById(
             Long id,
             Function<Long, Optional<EquipmentEntity>> getEquipmentById
