@@ -34,11 +34,12 @@ public class ExerciseServiceImpl implements ExerciseService {
     }
 
     @Override
-    public Optional<ExerciseEntity> getExerciseById(Long id) {
+    public ExerciseEntity getExerciseById(Long id) {
 
-        serviceValidator.validateGetExerciseById(id);
-
-        return exerciseRepository.findById(id);
+        return serviceValidator.validateGetExerciseById(
+                id,
+                exerciseRepository::findById
+        );
 
     }
 
