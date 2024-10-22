@@ -1,4 +1,12 @@
 spring:
+  # noinspection undefined
+  jwt:
+    private-key: 15f78ed854b2a9978ba3c0a7e40623c0b346a1b2e44761828d767524f1d85fb4
+    user-generator: application-dev-profile
+    token-expiration-millis: 120000
+  sql:
+    init:
+      mode: never
   datasource:
     url: jdbc:h2:mem:testdb
     driver-class-name: org.h2.Driver
