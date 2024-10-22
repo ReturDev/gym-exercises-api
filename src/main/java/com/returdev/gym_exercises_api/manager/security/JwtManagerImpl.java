@@ -14,9 +14,17 @@ import org.springframework.stereotype.Component;
 
 import java.time.Instant;
 
+/**
+ * Implementation of the {@link JwtManager} interface for handling JSON Web Tokens (JWT).
+ *
+ * <p>
+ * This class provides methods to generate and validate JWTs for user authentication,
+ * as well as extracting role information from the token.
+ * </p>
+ */
 @Component
 @RequiredArgsConstructor
-public class JwtManagerImpl implements JwtManager{
+public class JwtManagerImpl implements JwtManager {
 
     private final String ROLE_CLAIM_NAME = "role";
 
@@ -31,13 +39,18 @@ public class JwtManagerImpl implements JwtManager{
 
     private final MessageManager messageManager;
 
+    /**
+     * Generates a new JWT for a user with a specified expiration time and role claim.
+     *
+     * @return an {@link AuthToken} containing the generated token and its expiration time
+     */
     @Override
     public AuthToken generateUserToken() {
-
         Algorithm algorithm = Algorithm.HMAC256(privateKey);
         Instant currentTime = Instant.now();
         Instant expirationTime = currentTime.plusMillis(tokenExpirationDurationMillis);
-        String token = JWT.create().withIssuer(issuer)
+        String token = JWT.create()
+                .withIssuer(issuer)
                 .withIssuedAt(currentTime)
                 .withExpiresAt(expirationTime)
                 .withClaim(ROLE_CLAIM_NAME, "USER")
@@ -49,9 +62,15 @@ public class JwtManagerImpl implements JwtManager{
         );
     }
 
+    /**
+     * Validates a given JWT and returns its decoded form if valid.
+     *
+     * @param token the JWT to validate
+     * @return the decoded JWT if validation is successful
+     * @throws JWTVerificationException if the token is invalid or expired
+     */
     @Override
-    public DecodedJWT validateToken(String token) {
-
+    public DecodedJWT validateToken(String token) throws JWTVerificationException {
         try {
             Algorithm algorithm = Algorithm.HMAC256(privateKey);
 
@@ -65,15 +84,22 @@ public class JwtManagerImpl implements JwtManager{
             throw new JWTVerificationException(
                     messageManager.getMessage("exception.token.expired")
             );
-        } catch (JWTVerificationException e){
+        } catch (JWTVerificationException e) {
             throw new JWTVerificationException(
                     messageManager.getMessage("exception.token.invalid")
             );
         }
     }
 
+    /**
+     * Extracts the role claim from the decoded JWT.
+     *
+     * @param decodedJWT the decoded JWT from which to extract the role
+     * @return the role associated with the token
+     */
     @Override
     public String getTokenRole(DecodedJWT decodedJWT) {
         return decodedJWT.getClaim(ROLE_CLAIM_NAME).asString();
     }
 }
+
