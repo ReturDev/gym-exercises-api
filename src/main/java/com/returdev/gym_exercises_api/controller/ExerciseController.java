@@ -2,13 +2,13 @@ package com.returdev.gym_exercises_api.controller;
 
 import com.returdev.gym_exercises_api.dto.request.ExerciseRequestDTO;
 import com.returdev.gym_exercises_api.dto.request.pagination.ExercisePaginationRequestDTO;
-import com.returdev.gym_exercises_api.dto.response.ContentResponseDTO;
 import com.returdev.gym_exercises_api.dto.response.ExerciseResponseDTO;
-import com.returdev.gym_exercises_api.model.entities.ExerciseEntity;
+import com.returdev.gym_exercises_api.dto.response.wrapper.ContentResponseDTO;
+import com.returdev.gym_exercises_api.dto.response.wrapper.PaginationResponseDTO;
 import com.returdev.gym_exercises_api.mappers.EntityDtoMapper;
+import com.returdev.gym_exercises_api.model.entities.ExerciseEntity;
 import com.returdev.gym_exercises_api.service.data.exercise.ExerciseService;
 import jakarta.validation.Valid;
-import lombok.AllArgsConstructor;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.http.ResponseEntity;
@@ -16,7 +16,6 @@ import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import java.net.URI;
-import java.util.List;
 
 @RestController
 @RequestMapping("v1/exercise")
@@ -30,7 +29,7 @@ public class ExerciseController {
     private final EntityDtoMapper mapper;
 
     @GetMapping()
-    public ResponseEntity<ContentResponseDTO<List<ExerciseResponseDTO>>> getExercises(@Valid ExercisePaginationRequestDTO pagination) {
+    public ResponseEntity<PaginationResponseDTO<ExerciseResponseDTO>> getExercises(@Valid ExercisePaginationRequestDTO pagination) {
 
         Page<ExerciseEntity> page = exerciseService.getAllExercises(
                 mapper.paginationRequestDtoToPageable(pagination)
@@ -46,11 +45,13 @@ public class ExerciseController {
     public ResponseEntity<ContentResponseDTO<ExerciseResponseDTO>> getExerciseById(
             @PathVariable("id") Long id
     ) {
-        return exerciseService.getExerciseById(id).map(exercise ->
-                ResponseEntity.ok(
-                        mapper.exerciseEntityToContentResponse(exercise)
+
+        return ResponseEntity.ok(
+                mapper.exerciseEntityToContentResponse(
+                        exerciseService.getExerciseById(id)
                 )
-        ).orElseGet(() -> ResponseEntity.notFound().build());
+        );
+
     }
 
 
