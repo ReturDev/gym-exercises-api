@@ -7,6 +7,8 @@ import jakarta.persistence.EntityNotFoundException;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.context.annotation.Profile;
+import org.springframework.test.context.ActiveProfiles;
 
 import java.util.List;
 import java.util.Optional;
@@ -15,6 +17,7 @@ import static org.junit.jupiter.api.Assertions.assertDoesNotThrow;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 
 @SpringBootTest
+@ActiveProfiles("test")
 class ServiceValidatorImplTest {
 
     @Autowired
@@ -27,13 +30,13 @@ class ServiceValidatorImplTest {
     @Test
     public void validateGetExerciseById_whenIdIsNull_shouldThrowIllegalArgumentException() {
         assertThrows(IllegalArgumentException.class,
-                () -> serviceValidator.validateGetExerciseById(null)
+                () -> serviceValidator.validateGetExerciseById(null, null)
         );
     }
 
     @Test
     public void validateGetExerciseById_whenIdIsNotNull_shouldNotThrowException() {
-        assertDoesNotThrow(() -> serviceValidator.validateGetExerciseById(1L));
+        assertDoesNotThrow(() -> serviceValidator.validateGetExerciseById(1L, (id) -> Optional.of(new ExerciseEntity())));
     }
 
     // ----------------------------------------
@@ -43,13 +46,13 @@ class ServiceValidatorImplTest {
     @Test
     public void validateGetEquipmentById_whenIdIsNull_shouldThrowIllegalArgumentException() {
         assertThrows(IllegalArgumentException.class,
-                () -> serviceValidator.validateGetEquipmentById(null)
+                () -> serviceValidator.validateGetEquipmentById(null, null)
         );
     }
 
     @Test
     public void validateGetEquipmentById_whenIdIsNotNull_shouldNotThrowException() {
-        assertDoesNotThrow(() -> serviceValidator.validateGetEquipmentById(1L));
+        assertDoesNotThrow(() -> serviceValidator.validateGetEquipmentById(1L, (id) -> Optional.of(new EquipmentEntity())));
     }
 
     // ----------------------------------------
@@ -154,20 +157,7 @@ class ServiceValidatorImplTest {
                 () -> serviceValidator.validateSaveExercise(
                         exerciseEntity,
                         (name, id) -> true,
-                        id -> Optional.of(new EquipmentEntity()),
-                        null
-                )
-        );
-    }
-
-    @Test
-    public void validateSaveExercise_whenEquipmentNotExistsById_shouldThrowEntityNotFoundException() {
-        ExerciseEntity exerciseEntity = new ExerciseEntity(null, null, null, new EquipmentEntity(1L, null), null);
-        assertThrows(EntityNotFoundException.class,
-                () -> serviceValidator.validateSaveExercise(
-                        exerciseEntity,
-                        (name, id) -> false,
-                        id -> Optional.empty(),
+                        id -> new EquipmentEntity(),
                         null
                 )
         );
@@ -179,7 +169,7 @@ class ServiceValidatorImplTest {
         assertDoesNotThrow(() -> serviceValidator.validateSaveExercise(
                 exerciseEntity,
                 (name, id) -> false,
-                id -> Optional.of(new EquipmentEntity()),
+                id -> new EquipmentEntity(),
                 muscleEngagementEntities -> List.of()
         ));
     }
@@ -224,23 +214,9 @@ class ServiceValidatorImplTest {
                 exerciseEntity,
                 id -> true,
                 (name, id) -> false,
-                id -> Optional.of(new EquipmentEntity()),
+                id -> new EquipmentEntity(),
                 muscleEngagementEntities -> List.of()
         ));
-    }
-
-    @Test
-    public void validateUpdateExercise_whenEquipmentNotExistsById_shouldThrowEntityNotFoundException() {
-        ExerciseEntity exerciseEntity = new ExerciseEntity(1L, null, null, new EquipmentEntity(1L, null), null);
-        assertThrows(EntityNotFoundException.class,
-                () -> serviceValidator.validateUpdateExercise(
-                        exerciseEntity,
-                        id -> true,
-                        (name, id) -> false,
-                        id -> Optional.empty(),
-                        muscleEngagementEntities -> List.of()
-                )
-        );
     }
 
     // ----------------------------------------
@@ -263,14 +239,6 @@ class ServiceValidatorImplTest {
     }
 
     @Test
-    public void validatePartialUpdateExercise_whenEquipmentNotExistsById_shouldThrowEntityNotFoundException() {
-        ExerciseEntity exerciseEntity = new ExerciseEntity(1L, null, null, new EquipmentEntity(1L, null), null);
-        assertThrows(EntityNotFoundException.class,
-                () -> serviceValidator.validatePartialUpdateExercise(exerciseEntity, id -> Optional.of(exerciseEntity), null, id -> Optional.empty(), null)
-        );
-    }
-
-    @Test
     public void validatePartialUpdateExercise_whenExerciseExistsByNameAndEquipmentId_shouldThrowEntityExistsException() {
         ExerciseEntity exerciseEntity = new ExerciseEntity(1L, "name1", "description", new EquipmentEntity(1L, null), List.of());
         EquipmentEntity persistedEquipment = new EquipmentEntity(1L, "Equipment");
@@ -281,7 +249,7 @@ class ServiceValidatorImplTest {
                         exerciseEntity,
                         id -> Optional.of(persistedExercise),
                         (name, id) -> true,
-                        id -> Optional.of(persistedEquipment),
+                        id -> persistedEquipment,
                         muscleEngagements -> List.of()
                 )
         );
@@ -297,7 +265,7 @@ class ServiceValidatorImplTest {
                 exerciseEntity,
                 id -> Optional.of(persistedExercise),
                 (name, id) -> false,
-                id -> Optional.of(persistedEquipment),
+                id -> persistedEquipment,
                 muscleEngagements -> List.of()
         ));
     }
