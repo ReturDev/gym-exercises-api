@@ -4,6 +4,7 @@ import com.returdev.gym_exercises_api.model.entities.EquipmentEntity;
 import com.returdev.gym_exercises_api.repositories.data.EquipmentRepository;
 import com.returdev.gym_exercises_api.service.data.validators.ServiceValidator;
 import jakarta.transaction.Transactional;
+import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
@@ -11,23 +12,20 @@ import org.springframework.stereotype.Service;
 import java.util.Optional;
 
 @Service
+@RequiredArgsConstructor
 public class EquipmentServiceImpl implements EquipmentService {
 
     private final ServiceValidator serviceValidator;
     private final EquipmentRepository equipmentRepository;
 
 
-    public EquipmentServiceImpl(ServiceValidator serviceValidator, EquipmentRepository equipmentRepository) {
-        this.serviceValidator = serviceValidator;
-        this.equipmentRepository = equipmentRepository;
-    }
-
     @Override
-    public Optional<EquipmentEntity> getEquipmentById(Long id) {
+    public EquipmentEntity getEquipmentById(Long id) {
 
-        serviceValidator.validateGetEquipmentById(id);
-
-        return equipmentRepository.findById(id);
+        return serviceValidator.validateGetEquipmentById(
+                id,
+                equipmentRepository::findById
+        );
 
     }
 
