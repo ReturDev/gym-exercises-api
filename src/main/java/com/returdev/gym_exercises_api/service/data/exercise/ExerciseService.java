@@ -11,9 +11,9 @@ import java.util.Optional;
 @Validated
 public interface ExerciseService {
 
-    Page<ExerciseEntity> getAllExercises(Pageable pageable);
+    ExerciseEntity getExerciseById(Long id);
 
-    Optional<ExerciseEntity> getExerciseById(Long id);
+    Page<ExerciseEntity> getAllExercises(Pageable pageable);
 
     ExerciseEntity saveExercise(@Valid ExerciseEntity exercise);
 
