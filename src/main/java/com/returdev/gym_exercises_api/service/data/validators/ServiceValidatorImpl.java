@@ -33,13 +33,24 @@ public class ServiceValidatorImpl implements ServiceValidator {
     private final MessageManager messageManager;
 
     @Override
-    public void validateGetExerciseById(Long id) {
+    public ExerciseEntity validateGetExerciseById(
+            Long id,
+            Function<Long, Optional<ExerciseEntity>> getExerciseById
+    ) {
+
         validateIdIsNotNull(id);
+
+        return getExerciseEntityById(id, getExerciseById);
+
     }
 
     @Override
-    public void validateGetEquipmentById(Long id) {
+    public EquipmentEntity validateGetEquipmentById(Long id, Function<Long, Optional<EquipmentEntity>> getEquipmentById) {
+
         validateIdIsNotNull(id);
+
+        return getEquipmentEntityById(id, getEquipmentById);
+
     }
 
 
@@ -63,12 +74,7 @@ public class ServiceValidatorImpl implements ServiceValidator {
                 equipment.getId()
         );
 
-        notExistsById(
-                equipment.getId(),
-                existsById,
-                EQUIPMENT_NOT_EXISTS_BY_ID_RESOURCE
-
-        );
+        equipmentNotExistsById(equipment.getId(), existsById);
 
         equipmentExistsByName(equipment.getName(), existsByName);
 
@@ -79,12 +85,7 @@ public class ServiceValidatorImpl implements ServiceValidator {
 
         validateIdIsNotNull(id);
 
-        notExistsById(
-                id,
-                existsById,
-                EQUIPMENT_NOT_EXISTS_BY_ID_RESOURCE
-
-        );
+        equipmentNotExistsById(id, existsById);
 
     }
 
@@ -92,7 +93,7 @@ public class ServiceValidatorImpl implements ServiceValidator {
     public ExerciseEntity validateSaveExercise(
             ExerciseEntity exercise,
             BiPredicate<String, Long> existsByNameAndEquipmentId,
-            Function<Long, Optional<EquipmentEntity>> getEquipmentById,
+            Function<Long, EquipmentEntity> getEquipmentById,
             Function<List<MuscleEngagementEntity>, List<MuscleEngagementEntity>> getMuscleEngagementsWithId
     ) {
 
@@ -115,7 +116,7 @@ public class ServiceValidatorImpl implements ServiceValidator {
             ExerciseEntity exercise,
             Predicate<Long> existsById,
             BiPredicate<String, Long> existsByNameAndEquipmentId,
-            Function<Long, Optional<EquipmentEntity>> getEquipmentById,
+            Function<Long, EquipmentEntity> getEquipmentById,
             Function<List<MuscleEngagementEntity>, List<MuscleEngagementEntity>> getMuscleEngagementsWithId
     ) {
 
@@ -124,11 +125,7 @@ public class ServiceValidatorImpl implements ServiceValidator {
                 exercise.getId()
         );
 
-        notExistsById(
-                exercise.getId(),
-                existsById,
-                EXERCISE_NOT_EXISTS_BY_ID_RESOURCE
-        );
+        exerciseNotExistsById(exercise.getId(), existsById);
 
         return validateSaveOrUpdateExercise(
                 exercise,
@@ -144,7 +141,7 @@ public class ServiceValidatorImpl implements ServiceValidator {
             ExerciseEntity exercise,
             Function<Long, Optional<ExerciseEntity>> getExerciseById,
             BiPredicate<String, Long> existsByNameAndEquipmentId,
-            Function<Long, Optional<EquipmentEntity>> getEquipmentById,
+            Function<Long, EquipmentEntity> getEquipmentById,
             Function<List<MuscleEngagementEntity>, List<MuscleEngagementEntity>> getMuscleEngagementsWithId
     ) {
 
@@ -153,13 +150,7 @@ public class ServiceValidatorImpl implements ServiceValidator {
                 exercise.getId()
         );
 
-        ExerciseEntity persistedExercise = getExerciseById.apply(exercise.getId())
-                .orElseThrow(() -> new EntityNotFoundException(
-                        messageManager.getMessageWithParams(
-                                EXERCISE_NOT_EXISTS_BY_ID_RESOURCE,
-                                new Long[]{exercise.getId()}
-                        )
-                ));
+        ExerciseEntity persistedExercise = getExerciseEntityById(exercise.getId(), getExerciseById);
 
         return mergeExerciseFields(
                 persistedExercise,
@@ -175,11 +166,7 @@ public class ServiceValidatorImpl implements ServiceValidator {
 
         validateIdIsNotNull(id);
 
-        notExistsById(
-                id,
-                existsById,
-                EXERCISE_NOT_EXISTS_BY_ID_RESOURCE
-        );
+        exerciseNotExistsById(id, existsById);
 
     }
 
@@ -208,19 +195,13 @@ public class ServiceValidatorImpl implements ServiceValidator {
     private ExerciseEntity validateSaveOrUpdateExercise(
             ExerciseEntity exercise,
             BiPredicate<String, Long> existsByNameAndEquipmentId,
-            Function<Long, Optional<EquipmentEntity>> getEquipmentById,
+            Function<Long, EquipmentEntity> getEquipmentById,
             Function<List<MuscleEngagementEntity>, List<MuscleEngagementEntity>> getMuscleEngagementsWithId
     ) {
 
         exerciseExistsByNameAndEquipmentId(exercise.getName(), exercise.getEquipment().getId(), existsByNameAndEquipmentId);
 
-        EquipmentEntity equipment = getEquipmentById.apply(exercise.getEquipment().getId())
-                .orElseThrow(() -> new EntityNotFoundException(
-                        messageManager.getMessageWithParams(
-                                EQUIPMENT_NOT_EXISTS_BY_ID_RESOURCE,
-                                new Long[]{exercise.getEquipment().getId()}
-                        )
-                ));
+        EquipmentEntity equipment = getEquipmentById.apply(exercise.getEquipment().getId());
 
         List<MuscleEngagementEntity> muscleEngagementEntities = getMuscleEngagementsWithId.apply(exercise.getMusclesEngagement());
 
@@ -239,7 +220,7 @@ public class ServiceValidatorImpl implements ServiceValidator {
             ExerciseEntity persistedExercise,
             ExerciseEntity partialUpdateExercise,
             BiPredicate<String, Long> existsByNameAndEquipmentId,
-            Function<Long, Optional<EquipmentEntity>> getEquipmentById,
+            Function<Long, EquipmentEntity> getEquipmentById,
             Function<List<MuscleEngagementEntity>, List<MuscleEngagementEntity>> getMuscleEngagementsWithId
     ) {
 
@@ -251,14 +232,7 @@ public class ServiceValidatorImpl implements ServiceValidator {
                 .orElse(persistedExercise.getDescription());
 
         EquipmentEntity updatedEquipment = Optional.ofNullable(partialUpdateExercise.getEquipment())
-                .map(equipment -> getEquipmentById.apply(equipment.getId())
-                        .orElseThrow(() -> new EntityNotFoundException(
-                                messageManager.getMessageWithParams(
-                                        EQUIPMENT_NOT_EXISTS_BY_ID_RESOURCE,
-                                        new Long[]{equipment.getId()}
-                                )
-                        ))
-                )
+                .map(equipment -> getEquipmentById.apply(equipment.getId()))
                 .orElse(persistedExercise.getEquipment());
 
 
@@ -321,5 +295,57 @@ public class ServiceValidatorImpl implements ServiceValidator {
         }
 
     }
+
+    private void exerciseNotExistsById(
+            Long id,
+            Predicate<Long> existsById
+    ) {
+        notExistsById(
+                id,
+                existsById,
+                EXERCISE_NOT_EXISTS_BY_ID_RESOURCE
+        );
+    }
+
+    private ExerciseEntity getExerciseEntityById(
+            Long id,
+            Function<Long, Optional<ExerciseEntity>> getExerciseById
+    ) {
+
+        return getExerciseById.apply(id)
+                .orElseThrow(() -> new EntityNotFoundException(
+                        messageManager.getMessageWithParams(
+                                EXERCISE_NOT_EXISTS_BY_ID_RESOURCE,
+                                new Long[]{id}
+                        )
+                ));
+
+    }
+
+    private void equipmentNotExistsById(
+            Long id,
+            Predicate<Long> existsById
+    ) {
+        notExistsById(
+                id,
+                existsById,
+                EQUIPMENT_NOT_EXISTS_BY_ID_RESOURCE
+        );
+    }
+
+    private EquipmentEntity getEquipmentEntityById(
+            Long id,
+            Function<Long, Optional<EquipmentEntity>> getEquipmentById
+    ) {
+        return getEquipmentById.apply(id)
+                .orElseThrow(() -> new EntityNotFoundException(
+                        messageManager.getMessageWithParams(
+                                EQUIPMENT_NOT_EXISTS_BY_ID_RESOURCE,
+                                new Long[]{id}
+                        )
+                ));
+
+    }
+
 
 }
