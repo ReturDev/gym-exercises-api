@@ -8,8 +8,10 @@ import com.auth0.jwt.exceptions.TokenExpiredException;
 import com.auth0.jwt.interfaces.DecodedJWT;
 import com.returdev.gym_exercises_api.manager.message.MessageManager;
 import com.returdev.gym_exercises_api.model.auth.AuthToken;
+import jakarta.annotation.Nonnull;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.security.authentication.InsufficientAuthenticationException;
 import org.springframework.stereotype.Component;
 
 import java.time.Instant;
@@ -70,8 +72,11 @@ public class JwtManagerImpl implements JwtManager {
      * @throws JWTVerificationException if the token is invalid or expired
      */
     @Override
-    public DecodedJWT validateToken(String token) throws JWTVerificationException {
+    public DecodedJWT validateToken(@Nonnull String token) throws JWTVerificationException {
         try {
+
+            token = token.substring(7);
+
             Algorithm algorithm = Algorithm.HMAC256(privateKey);
 
             JWTVerifier verifier = JWT.require(algorithm)
@@ -98,7 +103,7 @@ public class JwtManagerImpl implements JwtManager {
      * @return the role associated with the token
      */
     @Override
-    public String getTokenRole(DecodedJWT decodedJWT) {
+    public String getTokenRole(@Nonnull DecodedJWT decodedJWT) {
         return decodedJWT.getClaim(ROLE_CLAIM_NAME).asString();
     }
 }
