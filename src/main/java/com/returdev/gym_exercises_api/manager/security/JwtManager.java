@@ -3,6 +3,7 @@ package com.returdev.gym_exercises_api.manager.security;
 import com.auth0.jwt.exceptions.JWTVerificationException;
 import com.auth0.jwt.interfaces.DecodedJWT;
 import com.returdev.gym_exercises_api.model.auth.AuthToken;
+import jakarta.annotation.Nonnull;
 
 /**
  * Interface for managing JSON Web Tokens (JWT) in the application.
@@ -28,7 +29,7 @@ public interface JwtManager {
      * @return the decoded JWT if the token is valid
      * @throws JWTVerificationException if the token is invalid or has expired
      */
-    DecodedJWT validateToken(String token) throws JWTVerificationException;
+    DecodedJWT validateToken(@Nonnull String token) throws JWTVerificationException;
 
     /**
      * Extracts the role claim from a decoded JWT.
@@ -36,6 +37,6 @@ public interface JwtManager {
      * @param decodedJWT the decoded JWT from which to extract the role
      * @return the role associated with the token, or null if not found
      */
-    String getTokenRole(DecodedJWT decodedJWT);
+    String getTokenRole(@Nonnull DecodedJWT decodedJWT);
 }
 
