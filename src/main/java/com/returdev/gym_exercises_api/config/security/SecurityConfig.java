@@ -1,5 +1,6 @@
 package com.returdev.gym_exercises_api.config.security;
 
+import com.returdev.gym_exercises_api.exceptions.InsufficientPermissionsException;
 import com.returdev.gym_exercises_api.manager.security.JwtManager;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
@@ -11,16 +12,19 @@ import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configurers.AbstractHttpConfigurer;
 import org.springframework.security.config.http.SessionCreationPolicy;
+import org.springframework.security.web.AuthenticationEntryPoint;
 import org.springframework.security.web.SecurityFilterChain;
+import org.springframework.security.web.access.AccessDeniedHandler;
 import org.springframework.security.web.authentication.www.BasicAuthenticationFilter;
+import org.springframework.web.servlet.HandlerExceptionResolver;
+
 
 /**
- * Configuration class for Spring Security settings.
- *
+ * Configuration class for security settings in the application.
  * <p>
- * This class configures the security filters, authentication mechanisms,
- * and session management for the application.
- * </p>
+ * This class configures web security settings, including JWT-based authentication,
+ * exception handling, and method security. It utilizes Spring Security to define
+ * a filter chain that secures endpoints with JWT tokens.
  */
 @Configuration
 @EnableWebSecurity
@@ -28,40 +32,80 @@ import org.springframework.security.web.authentication.www.BasicAuthenticationFi
 @RequiredArgsConstructor
 public class SecurityConfig {
 
-    // Manager for handling JWT token operations
     private final JwtManager jwtManager;
+    private final HandlerExceptionResolver handlerExceptionResolver;
 
     /**
-     * Configures the security filter chain for HTTP requests.
+     * Configures the security filter chain for the application.
+     * <p>
+     * This method sets up the security configurations such as disabling CSRF protection,
+     * basic HTTP authentication, and session management. It adds a custom JWT filter
+     * to the filter chain and configures exception handling for authentication
+     * and access-denied scenarios.
      *
-     * @param httpSecurity the HttpSecurity object to configure
+     * @param httpSecurity the HttpSecurity object to configure security settings
      * @return the configured SecurityFilterChain
      * @throws Exception if an error occurs during configuration
      */
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity httpSecurity) throws Exception {
-        // Disable CSRF protection and HTTP basic authentication
         return httpSecurity.csrf(AbstractHttpConfigurer::disable)
                 .httpBasic(AbstractHttpConfigurer::disable)
-                // Set session management to stateless (no session stored on the server)
                 .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
-                // Add custom JWT token filter before the basic authentication filter
-                .addFilterBefore(new JwtTokenFilter(jwtManager), BasicAuthenticationFilter.class)
+                .addFilterBefore(
+                        new JwtTokenFilter(jwtManager, handlerExceptionResolver),
+                        BasicAuthenticationFilter.class
+                )
+                .exceptionHandling(exceptionHandling ->
+                        exceptionHandling.authenticationEntryPoint(customAuthenticationEntryPoint())
+                                .accessDeniedHandler(customAccessDeniedHandler())
+                )
                 .build();
     }
 
     /**
-     * Provides an AuthenticationManager bean.
+     * Provides the authentication manager for handling authentication processes.
+     * <p>
+     * This bean is necessary for performing authentication operations in the application.
      *
-     * @param authenticationConfiguration the AuthenticationConfiguration to retrieve the manager
+     * @param authenticationConfiguration the configuration for authentication management
      * @return the AuthenticationManager instance
-     * @throws Exception if an error occurs while getting the manager
+     * @throws Exception if an error occurs during the retrieval of the authentication manager
      */
     @Bean
     public AuthenticationManager authenticationManager(AuthenticationConfiguration authenticationConfiguration) throws Exception {
-        // Retrieve and return the authentication manager from the configuration
         return authenticationConfiguration.getAuthenticationManager();
     }
 
+    /**
+     * Customizes the entry point for handling authentication failures.
+     * <p>
+     * This bean is responsible for resolving exceptions that occur when authentication fails.
+     * It delegates the resolution to a handler defined in the handlerExceptionResolver.
+     *
+     * @return a custom AuthenticationEntryPoint instance
+     */
+    @Bean
+    public AuthenticationEntryPoint customAuthenticationEntryPoint() {
+        return (request, response, authException) -> {
+            handlerExceptionResolver.resolveException(request, response, null, authException);
+        };
+    }
+
+    /**
+     * Customizes the handler for access-denied scenarios.
+     * <p>
+     * This bean is responsible for resolving exceptions when access to a resource is denied.
+     * It creates a new {@link InsufficientPermissionsException} to be handled appropriately.
+     *
+     * @return a custom AccessDeniedHandler instance
+     */
+    @Bean
+    public AccessDeniedHandler customAccessDeniedHandler() {
+        return (request, response, accessDeniedException) -> {
+            handlerExceptionResolver.resolveException(request, response, null, new InsufficientPermissionsException());
+        };
+    }
 }
+
 
