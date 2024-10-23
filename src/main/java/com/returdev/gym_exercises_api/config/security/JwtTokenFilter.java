@@ -23,38 +23,41 @@ import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.filter.OncePerRequestFilter;
+import org.springframework.web.servlet.HandlerExceptionResolver;
 
 import java.io.IOException;
 import java.net.URI;
 import java.util.List;
 
+
 /**
- * Filter that processes JWT tokens for authentication in incoming HTTP requests.
- *
+ * Filter responsible for validating JWT tokens in each HTTP request.
  * <p>
- * This filter checks for the presence of a JWT in the Authorization header of the request.
- * If a valid token is found, it extracts the user's role and creates an authentication token,
- * which is then set in the SecurityContext for the current request.
- * </p>
- *
- * <p>
- * In case of an invalid token, it generates a JSON response indicating the error and sets
- * the HTTP status to 401 Unauthorized.
- * </p>
+ * This filter intercepts each incoming HTTP request, checks for a JWT in the "Authorization" header,
+ * and validates it using {@link JwtManager}. If the token is valid, it extracts the user's role
+ * and sets an authentication object in the security context. If the token is invalid or expired,
+ * the filter handles the exception and returns an appropriate response.
  */
 @RequiredArgsConstructor
 public class JwtTokenFilter extends OncePerRequestFilter {
 
     private final JwtManager jwtManager;
+    private final HandlerExceptionResolver handlerExceptionResolver;
 
     /**
-     * Filters the incoming request to check for JWT authentication.
+     * Intercepts and filters HTTP requests to validate the JWT token.
+     * <p>
+     * This method checks the "Authorization" header of the request for a JWT token.
+     * If the token exists, it is validated using {@link JwtManager}. Upon successful
+     * validation, the user's role is extracted and added to the security context.
+     * If the token is invalid or expired, it catches {@link JWTVerificationException}
+     * and delegates the exception handling to {@link HandlerExceptionResolver}.
      *
-     * @param request The HTTP request object.
-     * @param response The HTTP response object.
-     * @param filterChain The filter chain to proceed with.
-     * @throws ServletException if an error occurs during the filtering process.
-     * @throws IOException if an I/O error occurs.
+     * @param request the HTTP request
+     * @param response the HTTP response
+     * @param filterChain the filter chain to continue processing the request
+     * @throws ServletException if there is a problem with the filtering process
+     * @throws IOException if an input or output exception occurs
      */
     @Override
     protected void doFilterInternal(
@@ -64,49 +67,28 @@ public class JwtTokenFilter extends OncePerRequestFilter {
     ) throws ServletException, IOException {
 
         try {
-
             String jwtToken = request.getHeader(HttpHeaders.AUTHORIZATION);
 
             if (jwtToken != null) {
-                // Remove "Bearer " prefix from the token
-                jwtToken = jwtToken.substring(7);
+                // Validate the JWT token
                 DecodedJWT decodedJWT = jwtManager.validateToken(jwtToken);
                 String role = jwtManager.getTokenRole(decodedJWT);
                 GrantedAuthority grantedAuthority = new SimpleGrantedAuthority("ROLE_".concat(role));
 
-                // Create authentication object
+                // Set authentication in the security context
                 Authentication authentication = new UsernamePasswordAuthenticationToken(null, null, List.of(grantedAuthority));
                 SecurityContextHolder.getContext().setAuthentication(authentication);
             }
 
-            // Continue the filter chain
+            // Continue with the next filter in the chain
             filterChain.doFilter(request, response);
 
         } catch (JWTVerificationException ex) {
-            // Handle invalid JWT token
-            String json = generateJsonResponse(ex, request.getRequestURI());
-            response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
-            response.getWriter().write(json);
+            // Handle JWT verification failure
+            handlerExceptionResolver.resolveException(request, response, null, ex);
         }
 
     }
-
-    /**
-     * Generates a JSON response indicating the error related to JWT verification.
-     *
-     * @param ex The exception thrown during JWT verification.
-     * @param requestUri The URI of the request that failed authentication.
-     * @return A JSON string representing the error details.
-     * @throws JsonProcessingException if an error occurs during JSON serialization.
-     */
-    private String generateJsonResponse(JWTVerificationException ex, String requestUri) throws JsonProcessingException {
-        ProblemDetail problemDetail = ErrorResponseDTO.forStatusAndDetail(HttpStatus.UNAUTHORIZED, ex.getMessage());
-        problemDetail.setInstance(URI.create(requestUri));
-
-        ObjectMapper objectMapper = new ObjectMapper();
-        objectMapper.setSerializationInclusion(JsonInclude.Include.NON_NULL);
-        ObjectWriter ow = objectMapper.writer().withDefaultPrettyPrinter();
-
-        return ow.writeValueAsString(problemDetail);
-    }
+    
 }
+
