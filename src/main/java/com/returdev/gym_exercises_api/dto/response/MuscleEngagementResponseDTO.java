@@ -1,5 +1,7 @@
 package com.returdev.gym_exercises_api.dto.response;
 
+import com.fasterxml.jackson.annotation.JsonProperty;
+
 /**
  * Data Transfer Object (DTO) for representing muscle engagement details in the response.
  *
@@ -15,5 +17,6 @@ package com.returdev.gym_exercises_api.dto.response;
 public record MuscleEngagementResponseDTO(
         Long id,
         String muscle,
+        @JsonProperty("muscle_activation_level")
         String muscleActivationLevel
 ) {}
