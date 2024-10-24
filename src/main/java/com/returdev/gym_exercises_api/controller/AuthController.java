@@ -1,8 +1,13 @@
 package com.returdev.gym_exercises_api.controller;
 
+import com.returdev.gym_exercises_api.annotation.swagger.response.InternalServerErrorResponseCode;
+import com.returdev.gym_exercises_api.annotation.swagger.response.OkResponseCode;
 import com.returdev.gym_exercises_api.dto.response.TokenResponseDTO;
 import com.returdev.gym_exercises_api.mappers.EntityDtoMapper;
 import com.returdev.gym_exercises_api.repositories.security.TokenRepository;
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.security.SecurityRequirements;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.annotation.security.PermitAll;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
@@ -22,16 +27,28 @@ import org.springframework.web.bind.annotation.RestController;
 @RestController
 @RequestMapping("v1/auth")
 @RequiredArgsConstructor
+@Tag(name = "Authentication", description = "Endpoints for user authentication and token management")
+@SecurityRequirements
 public class AuthController {
 
     private final TokenRepository repository;
     private final EntityDtoMapper mapper;
 
     /**
-     * Retrieves the authentication token for the user.
+     * Retrieves a public authentication token for testing purposes.
      *
-     * @return A response entity containing the token details.
+     * <p>
+     * This method provides a single public token that is valid for all users.
+     * The token has an expiration time and can be used to test the API without needing individual user credentials.
+     * </p>
+     * @return A response entity containing the public token details.
      */
+    @Operation(
+            summary = "Retrieve Public Authentication Token",
+            description = "Fetches a public authentication token for testing purposes, valid for all users."
+    )
+    @OkResponseCode
+    @InternalServerErrorResponseCode
     @GetMapping()
     public ResponseEntity<TokenResponseDTO> getUserToken() {
         // Fetch the token from the repository and map it to the response DTO
