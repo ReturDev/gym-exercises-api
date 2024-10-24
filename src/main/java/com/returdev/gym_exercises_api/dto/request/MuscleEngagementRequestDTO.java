@@ -1,5 +1,6 @@
 package com.returdev.gym_exercises_api.dto.request;
 
+import com.fasterxml.jackson.annotation.JsonProperty;
 import com.returdev.gym_exercises_api.model.enums.Muscle;
 import com.returdev.gym_exercises_api.model.enums.MuscleActivationLevel;
 import jakarta.validation.constraints.NotNull;
@@ -18,7 +19,10 @@ import jakarta.validation.constraints.NotNull;
  * @param muscleActivationLevel The activation level of the muscle. Must not be null.
  */
 public record MuscleEngagementRequestDTO(
-        @NotNull(message = "{validation.not_null.message}") Muscle muscle,
-        @NotNull(message = "{validation.not_null.message}") MuscleActivationLevel muscleActivationLevel
+        @NotNull(message = "{validation.not_null.message}")
+        Muscle muscle,
+        @JsonProperty("muscle_activation_level")
+        @NotNull(message = "{validation.not_null.message}")
+        MuscleActivationLevel muscleActivationLevel
 ) {}
 
