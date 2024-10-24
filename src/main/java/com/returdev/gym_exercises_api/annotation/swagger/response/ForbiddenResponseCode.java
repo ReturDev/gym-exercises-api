@@ -1,7 +1,6 @@
 package com.returdev.gym_exercises_api.annotation.swagger.response;
 
 
-import com.returdev.gym_exercises_api.dto.response.error.ErrorResponseDTO;
 import io.swagger.v3.oas.annotations.media.Content;
 import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
@@ -23,7 +22,7 @@ import java.lang.annotation.Target;
  * <ul>
  *   <li><strong>responseCode:</strong> The HTTP status code "403", indicating a forbidden request.</li>
  *   <li><strong>description:</strong> A description of the error condition, which defaults to "Forbidden".</li>
- *   <li><strong>content:</strong> Specifies that the response content will adhere to the schema defined by {@link ErrorResponseDTO}.</li>
+ *   <li><strong>content:</strong> Specifies that the response content will adhere to the schema.</li>
  * </ul>
  * </p>
  * <p>
@@ -47,7 +46,7 @@ import java.lang.annotation.Target;
         description = "Forbidden: The server understands the request but refuses to authorize it.",
         content = @Content(
                 schema = @Schema(
-                        implementation = ErrorResponseDTO.class,
+                        ref = "#/components/schemas/ErrorResponse",
                         description = "Error response object containing details about the forbidden request."
                 )
         )
