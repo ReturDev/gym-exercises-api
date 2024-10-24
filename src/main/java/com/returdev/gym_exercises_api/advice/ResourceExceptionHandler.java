@@ -1,6 +1,5 @@
 package com.returdev.gym_exercises_api.advice;
 
-import com.returdev.gym_exercises_api.dto.response.error.ErrorResponseDTO;
 import jakarta.persistence.EntityExistsException;
 import jakarta.persistence.EntityNotFoundException;
 import org.springframework.core.Ordered;
@@ -37,7 +36,7 @@ public class ResourceExceptionHandler {
     @ExceptionHandler(EntityNotFoundException.class)
     @ResponseStatus(HttpStatus.NOT_FOUND)
     public ProblemDetail handleEntityNotFound(EntityNotFoundException ex) {
-        return ErrorResponseDTO.forStatusAndDetail(HttpStatus.NOT_FOUND, ex.getMessage());
+        return ProblemDetail.forStatusAndDetail(HttpStatus.NOT_FOUND, ex.getMessage());
     }
 
     /**
@@ -53,7 +52,7 @@ public class ResourceExceptionHandler {
     @ExceptionHandler(EntityExistsException.class)
     @ResponseStatus(HttpStatus.CONFLICT)
     public ProblemDetail handleEntityExistsException(EntityExistsException ex) {
-        return ErrorResponseDTO.forStatusAndDetail(HttpStatus.CONFLICT, ex.getMessage());
+        return ProblemDetail.forStatusAndDetail(HttpStatus.CONFLICT, ex.getMessage());
     }
 
     /**
