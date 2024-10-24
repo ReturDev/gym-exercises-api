@@ -1,6 +1,5 @@
 package com.returdev.gym_exercises_api.config.security;
 
-import com.returdev.gym_exercises_api.exceptions.InsufficientPermissionsException;
 import com.returdev.gym_exercises_api.manager.security.JwtManager;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
@@ -12,9 +11,7 @@ import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configurers.AbstractHttpConfigurer;
 import org.springframework.security.config.http.SessionCreationPolicy;
-import org.springframework.security.web.AuthenticationEntryPoint;
 import org.springframework.security.web.SecurityFilterChain;
-import org.springframework.security.web.access.AccessDeniedHandler;
 import org.springframework.security.web.authentication.www.BasicAuthenticationFilter;
 import org.springframework.web.servlet.HandlerExceptionResolver;
 
@@ -56,10 +53,10 @@ public class SecurityConfig {
                         new JwtTokenFilter(jwtManager, handlerExceptionResolver),
                         BasicAuthenticationFilter.class
                 )
-                .exceptionHandling(exceptionHandling ->
-                        exceptionHandling.authenticationEntryPoint(customAuthenticationEntryPoint())
-                                .accessDeniedHandler(customAccessDeniedHandler())
-                )
+//                .exceptionHandling(exceptionHandling ->
+//                        exceptionHandling.authenticationEntryPoint(customAuthenticationEntryPoint())
+//                                .accessDeniedHandler(customAccessDeniedHandler())
+//                )
                 .build();
     }
 
@@ -77,35 +74,35 @@ public class SecurityConfig {
         return authenticationConfiguration.getAuthenticationManager();
     }
 
-    /**
-     * Customizes the entry point for handling authentication failures.
-     * <p>
-     * This bean is responsible for resolving exceptions that occur when authentication fails.
-     * It delegates the resolution to a handler defined in the handlerExceptionResolver.
-     *
-     * @return a custom AuthenticationEntryPoint instance
-     */
-    @Bean
-    public AuthenticationEntryPoint customAuthenticationEntryPoint() {
-        return (request, response, authException) -> {
-            handlerExceptionResolver.resolveException(request, response, null, authException);
-        };
-    }
-
-    /**
-     * Customizes the handler for access-denied scenarios.
-     * <p>
-     * This bean is responsible for resolving exceptions when access to a resource is denied.
-     * It creates a new {@link InsufficientPermissionsException} to be handled appropriately.
-     *
-     * @return a custom AccessDeniedHandler instance
-     */
-    @Bean
-    public AccessDeniedHandler customAccessDeniedHandler() {
-        return (request, response, accessDeniedException) -> {
-            handlerExceptionResolver.resolveException(request, response, null, new InsufficientPermissionsException());
-        };
-    }
+//    /**
+//     * Customizes the entry point for handling authentication failures.
+//     * <p>
+//     * This bean is responsible for resolving exceptions that occur when authentication fails.
+//     * It delegates the resolution to a handler defined in the handlerExceptionResolver.
+//     *
+//     * @return a custom AuthenticationEntryPoint instance
+//     */
+//    @Bean
+//    public AuthenticationEntryPoint customAuthenticationEntryPoint() {
+//        return (request, response, authException) -> {
+//            handlerExceptionResolver.resolveException(request, response, null, authException);
+//        };
+//    }
+//
+//    /**
+//     * Customizes the handler for access-denied scenarios.
+//     * <p>
+//     * This bean is responsible for resolving exceptions when access to a resource is denied.
+//     * It creates a new {@link InsufficientPermissionsException} to be handled appropriately.
+//     *
+//     * @return a custom AccessDeniedHandler instance
+//     */
+//    @Bean
+//    public AccessDeniedHandler customAccessDeniedHandler() {
+//        return (request, response, accessDeniedException) -> {
+//            handlerExceptionResolver.resolveException(request, response, null, new InsufficientPermissionsException());
+//        };
+//    }
 }
 
 
