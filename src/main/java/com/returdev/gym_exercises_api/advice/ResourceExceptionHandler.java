@@ -3,6 +3,8 @@ package com.returdev.gym_exercises_api.advice;
 import com.returdev.gym_exercises_api.dto.response.error.ErrorResponseDTO;
 import jakarta.persistence.EntityExistsException;
 import jakarta.persistence.EntityNotFoundException;
+import org.springframework.core.Ordered;
+import org.springframework.core.annotation.Order;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ProblemDetail;
 import org.springframework.web.bind.annotation.ExceptionHandler;
@@ -19,6 +21,7 @@ import org.springframework.web.servlet.resource.NoResourceFoundException;
  * a unified response format for these types of exceptions.
  */
 @RestControllerAdvice
+@Order(Ordered.HIGHEST_PRECEDENCE)
 public class ResourceExceptionHandler {
 
     /**
