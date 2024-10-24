@@ -1,5 +1,7 @@
 package com.returdev.gym_exercises_api.dto.response;
 
+import com.fasterxml.jackson.annotation.JsonProperty;
+
 import java.util.List;
 
 /**
@@ -22,6 +24,7 @@ public record ExerciseResponseDTO(
         String name,
         String description,
         EquipmentResponseDTO equipment,
+        @JsonProperty("muscle_engagements")
         List<MuscleEngagementResponseDTO> muscleEngagements
 ) {}
 
