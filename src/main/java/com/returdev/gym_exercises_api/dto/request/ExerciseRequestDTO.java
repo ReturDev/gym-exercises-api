@@ -1,5 +1,6 @@
 package com.returdev.gym_exercises_api.dto.request;
 
+import com.fasterxml.jackson.annotation.JsonProperty;
 import jakarta.validation.Valid;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotEmpty;
@@ -31,9 +32,13 @@ public record ExerciseRequestDTO(
         @Size(min = 10, max = 50, message = "{validation.size.message}")
         String name,
         String description,
-        @NotNull(message = "{validation.not_null.message}") Long equipmentId,
+        @JsonProperty("equipment_id")
+        @NotNull(message = "{validation.not_null.message}")
+        Long equipmentId,
         @Valid
-        @NotEmpty(message = "{validation.not_empty.message}") Set<MuscleEngagementRequestDTO> muscleEngagements
+        @JsonProperty("muscle_engagements")
+        @NotEmpty(message = "{validation.not_empty.message}")
+        Set<MuscleEngagementRequestDTO> muscleEngagements
 ) {
 
     /**
