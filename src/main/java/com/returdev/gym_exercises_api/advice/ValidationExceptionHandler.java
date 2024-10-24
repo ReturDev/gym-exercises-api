@@ -1,6 +1,5 @@
 package com.returdev.gym_exercises_api.advice;
 
-import com.returdev.gym_exercises_api.dto.response.error.ErrorResponseDTO;
 import com.returdev.gym_exercises_api.exceptions.InvalidEnumValueException;
 import com.returdev.gym_exercises_api.manager.message.MessageManager;
 import jakarta.validation.ConstraintViolationException;
@@ -164,7 +163,7 @@ public class ValidationExceptionHandler {
      * @return a ProblemDetail object containing the status and error messages
      */
     private ProblemDetail getErrorsProblemDetail(Map<String, String> errorMessages) {
-        ProblemDetail problemDetail = ErrorResponseDTO.forStatusAndDetail(
+        ProblemDetail problemDetail = ProblemDetail.forStatusAndDetail(
                 HttpStatus.BAD_REQUEST,
                 messageManager.getMessage("validation.detail.failed.message")
         );
