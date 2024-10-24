@@ -1,4 +1,4 @@
-package com.returdev.gym_exercises_api.annotation.swagger;
+package com.returdev.gym_exercises_api.annotation.swagger.response;
 
 import com.returdev.gym_exercises_api.dto.response.error.ErrorResponseDTO;
 import io.swagger.v3.oas.annotations.media.Content;
@@ -11,17 +11,18 @@ import java.lang.annotation.RetentionPolicy;
 import java.lang.annotation.Target;
 
 /**
- * Custom annotation to document a method that returns a 500 Internal Server Error response
+ * Custom annotation to document a method that returns a 409 Conflict response
  * in an OpenAPI specification using Swagger.
  * <p>
- * This annotation indicates that the API endpoint may result in a 500 status code,
- * which signifies that an unexpected condition was encountered on the server.
+ * This annotation indicates that the API endpoint may result in a 409 status code,
+ * which signifies that the request could not be completed due to a conflict with the current state
+ * of the resource.
  * </p>
  * <p>
  * The annotation includes the following properties:
  * <ul>
- *   <li><strong>responseCode:</strong> The HTTP status code "500", indicating an internal server error.</li>
- *   <li><strong>description:</strong> A description of the error condition, which defaults to "Internal Server Error: An unexpected condition was encountered."</li>
+ *   <li><strong>responseCode:</strong> The HTTP status code "409", indicating a conflict.</li>
+ *   <li><strong>description:</strong> A description of the conflict condition, which defaults to "Conflict".</li>
  *   <li><strong>content:</strong> Specifies that the response content will adhere to the schema defined by {@link ErrorResponseDTO}.</li>
  * </ul>
  * </p>
@@ -32,9 +33,9 @@ import java.lang.annotation.Target;
  * <p>
  * <strong>Example usage:</strong>
  * <pre>{@code
- * @InternalServerErrorResponseCode
- * public ResponseEntity<Item> getItem(Long id) {
- *     return itemService.findItemById(id);
+ * @ConflictResponseCode
+ * public ResponseEntity<Item> createItem(Item item) {
+ *     return itemService.createItem(item);
  * }
  * }</pre>
  * </p>
@@ -42,14 +43,14 @@ import java.lang.annotation.Target;
 @Target({ElementType.METHOD, ElementType.TYPE})
 @Retention(RetentionPolicy.RUNTIME)
 @ApiResponse(
-        responseCode = "500",
-        description = "Internal Server Error: An unexpected condition was encountered.",
+        responseCode = "409",
+        description = "Conflict: The request could not be completed due to a conflict with the current state of the resource.",
         content = @Content(
                 schema = @Schema(
                         implementation = ErrorResponseDTO.class,
-                        description = "Error response object containing details of the internal server error."
+                        description = "Error response object containing details about the conflict."
                 )
         )
 )
-public @interface InternalServerErrorResponseCode {}
+public @interface ConflictResponseCode {}
 

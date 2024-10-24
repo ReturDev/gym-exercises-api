@@ -1,4 +1,5 @@
-package com.returdev.gym_exercises_api.annotation.swagger;
+package com.returdev.gym_exercises_api.annotation.swagger.response;
+
 
 import com.returdev.gym_exercises_api.dto.response.error.ErrorResponseDTO;
 import io.swagger.v3.oas.annotations.media.Content;
@@ -11,17 +12,17 @@ import java.lang.annotation.RetentionPolicy;
 import java.lang.annotation.Target;
 
 /**
- * Custom annotation to document a method that returns a 400 Bad Request response
+ * Custom annotation to document a method that returns a 403 Forbidden response
  * in an OpenAPI specification using Swagger.
  * <p>
- * This annotation indicates that the API endpoint may result in a 400 status code,
- * which signifies that the request was invalid or cannot be processed due to client error.
+ * This annotation indicates that the API endpoint may result in a 403 status code,
+ * which signifies that the server understands the request but refuses to authorize it.
  * </p>
  * <p>
  * The annotation includes the following properties:
  * <ul>
- *   <li><strong>responseCode:</strong> The HTTP status code "400", indicating a bad request.</li>
- *   <li><strong>description:</strong> A description of the error condition, which defaults to "Bad Request".</li>
+ *   <li><strong>responseCode:</strong> The HTTP status code "403", indicating a forbidden request.</li>
+ *   <li><strong>description:</strong> A description of the error condition, which defaults to "Forbidden".</li>
  *   <li><strong>content:</strong> Specifies that the response content will adhere to the schema defined by {@link ErrorResponseDTO}.</li>
  * </ul>
  * </p>
@@ -32,7 +33,7 @@ import java.lang.annotation.Target;
  * <p>
  * <strong>Example usage:</strong>
  * <pre>{@code
- * @BadRequestResponseCode
+ * @ForbiddenResponseCode
  * public ResponseEntity<Item> updateItem(Long id, Item item) {
  *     return itemService.updateItem(id, item);
  * }
@@ -42,14 +43,14 @@ import java.lang.annotation.Target;
 @Target({ElementType.METHOD, ElementType.TYPE})
 @Retention(RetentionPolicy.RUNTIME)
 @ApiResponse(
-        responseCode = "400",
-        description = "Bad Request: The request was invalid or cannot be processed due to client error.",
+        responseCode = "403",
+        description = "Forbidden: The server understands the request but refuses to authorize it.",
         content = @Content(
                 schema = @Schema(
                         implementation = ErrorResponseDTO.class,
-                        description = "Error response object containing details about the bad request."
+                        description = "Error response object containing details about the forbidden request."
                 )
         )
 )
-public @interface BadRequestResponseCode {}
+public @interface ForbiddenResponseCode {}
 

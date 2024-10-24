@@ -1,4 +1,4 @@
-package com.returdev.gym_exercises_api.annotation.swagger;
+package com.returdev.gym_exercises_api.annotation.swagger.response;
 
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 

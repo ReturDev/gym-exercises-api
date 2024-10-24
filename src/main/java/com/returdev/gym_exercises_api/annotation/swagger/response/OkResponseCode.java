@@ -1,4 +1,4 @@
-package com.returdev.gym_exercises_api.annotation.swagger;
+package com.returdev.gym_exercises_api.annotation.swagger.response;
 
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 
@@ -6,7 +6,6 @@ import java.lang.annotation.ElementType;
 import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;
 import java.lang.annotation.Target;
-import java.lang.reflect.Type;
 
 /**
  * Custom annotation to document a method that returns a successful HTTP 200 response in an OpenAPI specification using Swagger.
