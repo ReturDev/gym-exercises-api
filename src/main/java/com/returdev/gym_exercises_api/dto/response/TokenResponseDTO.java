@@ -17,6 +17,7 @@ import java.time.Duration;
  * @param expirationDuration The duration until the token expires.
  */
 public record TokenResponseDTO(
+        @JsonProperty("auth_token")
         String authToken,
 
         @JsonProperty("time_to_expire")
