@@ -1,13 +1,10 @@
 package com.returdev.gym_exercises_api.advice;
 
-import com.returdev.gym_exercises_api.dto.response.error.ErrorResponseDTO;
 import com.returdev.gym_exercises_api.manager.message.MessageManager;
-import lombok.AllArgsConstructor;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ProblemDetail;
-import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
@@ -44,7 +41,7 @@ public class CommonExceptionHandler {
         log.error("Internal Server Error", ex);
 
         // Return a ProblemDetail response with a generic server error message
-        return ErrorResponseDTO.forStatusAndDetail(
+        return ProblemDetail.forStatusAndDetail(
                 HttpStatus.INTERNAL_SERVER_ERROR,
                 messageManager.getMessage("exception.generic.server_internal_error")
         );
