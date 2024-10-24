@@ -5,12 +5,15 @@ import com.returdev.gym_exercises_api.exceptions.InvalidEnumValueException;
 import com.returdev.gym_exercises_api.manager.message.MessageManager;
 import jakarta.validation.ConstraintViolationException;
 import lombok.RequiredArgsConstructor;
+import org.springframework.core.Ordered;
+import org.springframework.core.annotation.Order;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ProblemDetail;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
+import org.springframework.web.method.annotation.MethodArgumentTypeMismatchException;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -25,6 +28,7 @@ import java.util.Map;
  */
 @RestControllerAdvice
 @RequiredArgsConstructor
+@Order(Ordered.HIGHEST_PRECEDENCE)
 public class ValidationExceptionHandler {
 
     private final MessageManager messageManager;
@@ -123,6 +127,33 @@ public class ValidationExceptionHandler {
         return ProblemDetail.forStatusAndDetail(HttpStatus.BAD_REQUEST, ex.getMessage());
     }
 
+
+    /**
+     * Handles exceptions thrown when a method argument type mismatch occurs.
+     * <p>
+     * This exception is triggered when a method is called with an argument
+     * that does not match the expected type, such as when a request parameter
+     * cannot be converted to the specified type. The handler responds
+     * with a 400 BAD REQUEST status and provides a detailed error message.
+     * <p>
+     *
+     * @param ex the {@link MethodArgumentTypeMismatchException} that was thrown
+     * @return a {@link ProblemDetail} object containing the status and error message
+     */
+    @ExceptionHandler(MethodArgumentTypeMismatchException.class)
+    @ResponseStatus(HttpStatus.BAD_REQUEST)
+    public ProblemDetail handleMethodArgumentTypeMismatchException(MethodArgumentTypeMismatchException ex){
+        Class<?> requiredType = ex.getRequiredType();
+        String requiredTypeName = requiredType != null ? requiredType.getSimpleName() : "Unspecified";
+        return ProblemDetail.forStatusAndDetail(
+                HttpStatus.BAD_REQUEST,
+                messageManager.getMessageWithParams(
+                        "exception.generic.type_mismatch",
+                        new String[]{requiredTypeName}
+                )
+        );
+    }
+
     /**
      * Creates a ProblemDetail object for validation errors.
      * <p>
@@ -143,5 +174,6 @@ public class ValidationExceptionHandler {
 
         return problemDetail;
     }
+
 }
 
