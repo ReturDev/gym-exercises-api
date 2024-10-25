@@ -2,6 +2,7 @@ package com.returdev.gym_exercises_api.dto.response;
 
 import com.fasterxml.jackson.annotation.JsonGetter;
 import com.fasterxml.jackson.annotation.JsonProperty;
+import io.swagger.v3.oas.annotations.media.Schema;
 
 import java.time.Duration;
 
@@ -16,6 +17,7 @@ import java.time.Duration;
  * @param authToken The authentication token.
  * @param expirationDuration The duration until the token expires.
  */
+@Schema(name = "Token")
 public record TokenResponseDTO(
         @JsonProperty("auth_token")
         String authToken,
