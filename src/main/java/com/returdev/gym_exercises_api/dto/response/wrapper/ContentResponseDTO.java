@@ -1,6 +1,7 @@
 package com.returdev.gym_exercises_api.dto.response.wrapper;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
+import io.swagger.v3.oas.annotations.media.Schema;
 
 
 /**
@@ -16,6 +17,7 @@ import com.fasterxml.jackson.annotation.JsonProperty;
  * @param <T> The type of content being wrapped.
  * @param content The content of type {@code T} to be included in the response.
  */
+@Schema(name = "Content")
 public record ContentResponseDTO<T>(
         @JsonProperty("data") T content
 ) {}
