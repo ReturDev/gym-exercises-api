@@ -1,6 +1,7 @@
 package com.returdev.gym_exercises_api.dto.response;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
+import io.swagger.v3.oas.annotations.media.Schema;
 
 import java.util.List;
 
@@ -19,6 +20,7 @@ import java.util.List;
  * @param equipment The equipment associated with the exercise.
  * @param muscleEngagements A list of muscle engagements involved in the exercise.
  */
+@Schema(name = "Exercise")
 public record ExerciseResponseDTO(
         Long id,
         String name,
