@@ -75,6 +75,7 @@ public class ExerciseEntity {
      */
     @Column(name = "description", nullable = false)
     @NotNull(message = "{validation.not_null.message}")
+    @Lob
     private String description;
 
     /**
