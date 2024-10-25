@@ -1,6 +1,7 @@
 package com.returdev.gym_exercises_api.dto.response;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
+import io.swagger.v3.oas.annotations.media.Schema;
 
 /**
  * Data Transfer Object (DTO) for representing muscle engagement details in the response.
@@ -14,6 +15,7 @@ import com.fasterxml.jackson.annotation.JsonProperty;
  * @param muscle The name of the muscle involved in the engagement.
  * @param muscleActivationLevel  The activation level of the muscle (e.g., HIGH, MEDIUM, LOW).
  */
+@Schema(name = "MuscleEngagement")
 public record MuscleEngagementResponseDTO(
         Long id,
         String muscle,
