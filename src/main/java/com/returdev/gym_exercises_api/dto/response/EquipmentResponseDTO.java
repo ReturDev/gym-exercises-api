@@ -1,5 +1,7 @@
 package com.returdev.gym_exercises_api.dto.response;
 
+import io.swagger.v3.oas.annotations.media.Schema;
+
 /**
  * Data Transfer Object (DTO) for representing equipment details in the response.
  *
@@ -13,6 +15,7 @@ package com.returdev.gym_exercises_api.dto.response;
  * @param id The unique identifier for the equipment.
  * @param name The name of the equipment.
  */
+@Schema(name = "Equipment")
 public record EquipmentResponseDTO(
         Long id,
         String name
