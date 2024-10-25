@@ -1,6 +1,7 @@
 package com.returdev.gym_exercises_api.dto.response.wrapper;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
+import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 
@@ -22,6 +23,7 @@ import java.util.List;
  * @param content A list of content items of type {@code T} for the current page.
  * @param pageInfo Pagination metadata including size, total elements, total pages, and current page number.
  */
+@Schema(name = "Pagination")
 public record PaginationResponseDTO<T>(
         @JsonProperty("data") List<T> content,
         @JsonProperty("pageInfo") PageInfo pageInfo
