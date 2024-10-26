@@ -12,7 +12,7 @@ import lombok.AllArgsConstructor;
  * how the results should be sorted based on the exercise's attributes.
  * </p>
  */
-public class ExercisePaginationRequestDTO extends PaginationRequestDTO {
+public final class ExercisePaginationRequestDTO extends PaginationRequestDTO {
 
     /**
      * The field by which to order the results. Can be "ID", "EXERCISE_NAME", or "EQUIPMENT_NAME".

@@ -19,7 +19,7 @@ import org.springframework.data.domain.Sort;
  * </p>
  */
 @Getter
-public abstract class PaginationRequestDTO {
+public sealed abstract class PaginationRequestDTO permits EquipmentPaginationRequestDTO, ExercisePaginationRequestDTO {
 
     // Default values for pagination
     public static final int DEFAULT_PAGE = 1;
@@ -64,6 +64,6 @@ public abstract class PaginationRequestDTO {
      *
      * @return The field name to order by.
      */
-    abstract public String getOrderBy();
+    public abstract String getOrderBy();
 }
 
