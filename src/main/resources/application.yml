@@ -1,0 +1,30 @@
+spring:
+  application:
+    name: gym-exercises-api
+  datasource:
+    url: ${DB_URL}
+    username: ${DB_USERNAME}
+    password: ${DB_PASSWORD}
+    driver-class-name: com.mysql.cj.jdbc.Driver
+  jpa:
+    hibernate:
+      ddl-auto: 'update'
+  messages:
+    basename: messages
+  # noinspection undefined
+  jwt:
+    private-key: ${JWT_PRIVATE_KEY}
+    user-generator: ${JWT_USER_GENERATOR}
+    token-expiration-millis : 900_000
+server:
+  servlet:
+    context-path: ${CONTEXT_PATH}
+springdoc:
+  swagger-ui:
+    path: /doc
+  override-with-generic-response: false
+  default-produces-media-type: application/json
+# noinspection undefined
+swagger:
+  server:
+    path: ${SWAGGER_SERVER_PATH}
