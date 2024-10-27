@@ -6,8 +6,31 @@ spring:
     driver-class-name: com.mysql.cj.jdbc.Driver
   jpa:
     hibernate:
-      ddl-auto: 'create-drop'
+      ddl-auto: 'update'
     show-sql: true
+    properties:
+      hibernate:
+        dialect: org.hibernate.dialect.MySQLDialect
+  messages:
+    basename: messages
+#  autoconfigure:
+#    exclude:
+#      - org.springframework.boot.autoconfigure.security.servlet.SecurityAutoConfiguration
+  # noinspection undefined
+  jwt:
+    private-key: 15f78ed854b2a9978ba3c0a7e40623c0b346a1b2e44761828d767524f1d85fb4
+    user-generator: application-dev-profile
+    token-expiration-millis : 120000
+    developer-token: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJhcHBsaWNhdGlvbi1kZXYtcHJvZmlsZSIsInJvbGUiOiJERVZFTE9QRVIifQ.YeT8CQ-j2a33LCAL4xpBO4MMRoRrpRQMHZ1JmuJXfpc
 server:
   servlet:
     context-path: /gym-exercises/api
+springdoc:
+  swagger-ui:
+    path: /doc
+  override-with-generic-response: false
+  default-produces-media-type: application/json
+# noinspection undefined
+swagger:
+  server:
+    path: http://localhost:8080/gym-exercises/api/
