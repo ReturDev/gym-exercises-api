@@ -10,7 +10,7 @@
 	</parent>
 	<groupId>com.returdev</groupId>
 	<artifactId>gym-exercises-api</artifactId>
-	<version>0.0.1-SNAPSHOT</version>
+	<version>1.0.0</version>
 	<name>gym-exercises-api</name>
 	<description>An API for managing gym exercises</description>
 	<url/>
