@@ -54,14 +54,14 @@ public interface MuscleEngagementRepository extends JpaRepository<MuscleEngageme
     Optional<Long> findIdByMuscleAndActivationLevel(@Param("muscle") Muscle muscle, @Param("activationLevel") MuscleActivationLevel activationLevel);
 
     /**
-     * Finds a list of muscle engagement entities based on a list of muscles and activation levels.
+     * Finds a  muscle engagement entity based on a muscle and activation level.
      *
-     * @param muscles the list of muscles to filter by
-     * @param activationLevels the list of activation levels to filter by
+     * @param muscle the list of muscles to filter by
+     * @param activationLevel the list of activation levels to filter by
      * @return a list of {@link MuscleEngagementEntity} that match the specified muscles and activation levels
      */
-    @Query("SELECT me FROM MuscleEngagementEntity me WHERE me.muscle IN :muscles AND me.muscleActivationLevel IN :activationLevels")
-    List<MuscleEngagementEntity> findByMusclesAndActivationLevels(@Param("muscles") List<Muscle> muscles, @Param("activationLevels") List<MuscleActivationLevel> activationLevels);
+    @Query("SELECT me FROM MuscleEngagementEntity me WHERE me.muscle = :muscle AND me.muscleActivationLevel = :activationLevel")
+    MuscleEngagementEntity findByMuscleAndActivationLevel(@Param("muscle") Muscle muscle, @Param("activationLevel") MuscleActivationLevel activationLevel);
 
 }
 
