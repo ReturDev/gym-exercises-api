@@ -68,10 +68,12 @@ public class MuscleEngagementServiceImpl implements MuscleEngagementService {
      */
     @Override
     public List<MuscleEngagementEntity> getMuscleEngagementsWithId(List<MuscleEngagementEntity> muscleEngagements) {
-        return muscleEngagementRepository.findByMusclesAndActivationLevels(
-                muscleEngagements.stream().map(MuscleEngagementEntity::getMuscle).toList(),
-                muscleEngagements.stream().map(MuscleEngagementEntity::getMuscleActivationLevel).toList()
-        );
+
+        return muscleEngagements.stream().map(me ->
+                muscleEngagementRepository.findByMuscleAndActivationLevel(me.getMuscle(), me.getMuscleActivationLevel()
+                )
+        ).toList();
+
     }
 }
 
