@@ -1,4 +1,4 @@
-# Gym Exercises API 🏋️‍♂️   [![API](https://img.shields.io/badge/API-1.0.0-%23228B22?style=flat)](https://gym-exercises-api.onrender.com/gym-exercises/api/swagger-ui/index.html)
+# Gym Exercises API 🏋️‍♂️   [![API](https://img.shields.io/badge/API-1.1.0-%23228B22?style=flat)](https://gym-exercises-api.onrender.com/gym-exercises/api/swagger-ui/index.html)
 
 ### 🔗  [Try the API Documentation](https://gym-exercises-api.onrender.com/gym-exercises/api/swagger-ui/index.html)
 
