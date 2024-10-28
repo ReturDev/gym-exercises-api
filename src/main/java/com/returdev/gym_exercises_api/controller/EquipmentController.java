@@ -109,7 +109,7 @@ public class EquipmentController {
             summary = "Save a new equipment",
             description = "Creates a new equipment entity in the system. This endpoint requires a **private key** for access."
     )
-    @OkResponseCode
+    @CreatedResponseCode
     @NotFoundResponseCode
     @ConflictResponseCode
     @io.swagger.v3.oas.annotations.parameters.RequestBody(

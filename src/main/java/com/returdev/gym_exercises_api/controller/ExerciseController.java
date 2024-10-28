@@ -122,7 +122,7 @@ public class ExerciseController {
         - HIGH, MEDIUM, LOW
         """
     )
-    @OkResponseCode
+    @CreatedResponseCode
     @NotFoundResponseCode
     @ConflictResponseCode
     @io.swagger.v3.oas.annotations.parameters.RequestBody(
