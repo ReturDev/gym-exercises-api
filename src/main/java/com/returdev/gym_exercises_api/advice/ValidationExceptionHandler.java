@@ -8,6 +8,7 @@ import org.springframework.core.Ordered;
 import org.springframework.core.annotation.Order;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ProblemDetail;
+import org.springframework.http.converter.HttpMessageNotReadableException;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.ResponseStatus;
@@ -150,6 +151,27 @@ public class ValidationExceptionHandler {
                         "exception.generic.type_mismatch",
                         new String[]{requiredTypeName}
                 )
+        );
+    }
+
+    /**
+     * Handles exceptions thrown when an HTTP message is not readable.
+     * <p>
+     * This exception is triggered when the request body cannot be deserialized
+     * due to malformed JSON or other issues that prevent the server from interpreting
+     * the incoming request. The handler responds with a 400 BAD REQUEST status
+     * and provides a detailed error message indicating the nature of the problem.
+     * </p>
+     *
+     * @param ex the {@link HttpMessageNotReadableException} that was thrown
+     * @return a {@link ProblemDetail} object containing the status and error message
+     */
+    @ExceptionHandler(HttpMessageNotReadableException.class)
+    @ResponseStatus(HttpStatus.BAD_REQUEST)
+    public ProblemDetail handleHttpMessageNotReadableException(HttpMessageNotReadableException ex){
+        return ProblemDetail.forStatusAndDetail(
+                HttpStatus.BAD_REQUEST,
+                messageManager.getMessage("exception.json.request_malformed")
         );
     }
 
