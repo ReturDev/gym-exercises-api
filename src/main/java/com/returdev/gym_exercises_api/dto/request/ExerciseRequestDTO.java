@@ -29,7 +29,7 @@ import java.util.Set;
 public record ExerciseRequestDTO(
         Long id,
         @NotBlank(message = "{validation.not_blank.message}")
-        @Size(min = 10, max = 50, message = "{validation.size.message}")
+        @Size(min = 4, max = 30, message = "{validation.size.message}")
         String name,
         String description,
         @JsonProperty("equipment_id")
