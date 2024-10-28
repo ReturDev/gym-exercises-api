@@ -2,7 +2,7 @@
 
 ### 🔗  [Try the API Documentation](https://gym-exercises-api.onrender.com/gym-exercises/api/swagger-ui/index.html)
 
-> **⚠️ Note:** This application is deployed on a free hosting service for testing purposes. As a result, performance may be slower than expected.
+> **⚠️ Note:** This API is hosted on a free service for testing purposes, which may lead to slower performance. Additionally, if the API has not been used for a while, the server may shut down, resulting in longer load times upon reactivation.
 
 ## 📜 Overview
 
