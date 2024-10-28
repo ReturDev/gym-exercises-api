@@ -48,7 +48,6 @@ public class ExerciseEntity {
     @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "exercises_sequence")
     @SequenceGenerator(name = "exercises_sequence", allocationSize = 1)
     @Column(name = "exercise_id")
-    @NotNull(message = "{validation.not_null.message}")
     private Long id;
 
     /**
@@ -61,8 +60,8 @@ public class ExerciseEntity {
     @Column(name = "name", nullable = false)
     @NotBlank(message = "{validation.not_blank.message}")
     @Size(
-            min = 10,
-            max = 50,
+            min = 4,
+            max = 30,
             message = "{validation.size.message}"
     )
     private String name;
