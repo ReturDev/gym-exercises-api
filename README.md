@@ -1,8 +1,13 @@
 # Gym Exercises API 🏋️‍♂️   [![API](https://img.shields.io/badge/API-1.1.0-%23228B22?style=flat)](https://gym-exercises-api.onrender.com/gym-exercises/api/swagger-ui/index.html)
 
-### 🔗  [Try the API Documentation](https://gym-exercises-api.onrender.com/gym-exercises/api/swagger-ui/index.html)
+### ⚠️The host is currently down⚠️
+<!--
+### 🔗  [Try the API Documentation]
+(https://gym-exercises-api.onrender.com/gym-exercises/api/swagger-ui/index.html)
 
 > **⚠️ Note:** This API is hosted on a free service for testing purposes, which may lead to slower performance. Additionally, if the API has not been used for a while, the server may shut down, resulting in longer load times upon reactivation. **Please allow between 3 and 5 minutes** for the API to fully start up.
+
+-->
 ## 📜 Overview
 
 The **Gym Exercises API** is a RESTful service designed to manage gym exercises and equipment. It provides endpoints for creating, updating, retrieving, and deleting exercises and equipment, along with their associated muscle engagements.
